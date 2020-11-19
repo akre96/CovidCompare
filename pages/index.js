@@ -7,6 +7,8 @@ import useSWR from 'swr'
 import Layout from "../components/layout"
 import CompareModelsLine from "../components/charts/CompareModelsLine"
 
+import loc_id_map from "../lib/loc_id_map.json"
+
 const fetcher = async (url) => {
   const res = await fetch(url)
   const data = await res.json()
@@ -16,38 +18,35 @@ const fetcher = async (url) => {
   }
   return data
 }
-function ShowError({data, errors}) {
-  if (errors) return "An error has occurred.";
-  if (!data) return "Loading...";
-  return (
-    JSON.stringify(data)
-  );
-}
+
 
 const IndexPage = () => {
   // React Hooks for current country and y-axis
   const [selectedCountry, setCountry] = useState('United States')
   const [rate, setRate] = useState(0)
-
-  let sqlData = []
-  const { data, errors } = useSWR('/api/predictions', fetcher)
-
+  
+  const loc_id = loc_id_map[selectedCountry]
+  const { data, errors } = useSWR('/api/predictions/' + loc_id, fetcher)
 
   // List of possible regions
-  const selectList = sqlData.map((countryData) => (
-    {value: countryData.fieldValue, label: countryData.fieldValue}
+  const selectList = Object.keys(loc_id_map).map((loc) => (
+    {value: loc, label: loc}
     ))
 
 
-  // Render chart for given region
-  const CountryChart = sqlData.filter(
-    (countryData) => (countryData.fieldValue === selectedCountry)
-    )
-    .map((countryData) => (
-    <div key={selectedCountry}>
-    <CompareModelsLine height={400} data={countryData.nodes} rate={rate}/>
-    </div>
-  ))
+  function CountryChart({data, errors}) {
+    if (errors) return "An error has occurred.";
+    if (!data) return (
+      <div className="row">
+        Loading...
+      </div>
+      );
+    return (
+      <div key={selectedCountry}>
+      <CompareModelsLine height={400} data={data.data} showRate={rate}/>
+      </div>
+    );
+  }
 
   // Y-axis toggle
   const axes = [
@@ -85,9 +84,7 @@ const IndexPage = () => {
       >
        {AxesToggle}
       </ToggleButtonGroup>
-      {CountryChart}
-      <br />
-      <ShowError data={data} errors={errors} />
+      <CountryChart data={data} errors={errors} />
     </Layout>
   )
 
