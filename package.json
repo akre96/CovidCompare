@@ -8,8 +8,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@mysql/xdevapi": "8.0.22",
+    "bootstrap": "^4.5.3",
+    "dayjs": "^1.9.6",
+    "mysql2": "^2.2.5",
     "next": "10.0.1",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-bootstrap": "^1.4.0",
+    "react-dom": "17.0.1",
+    "react-select": "^3.1.0",
+    "recharts": "^1.8.5",
+    "serverless-mysql": "^1.5.4",
+    "sql-template-strings": "^2.2.2",
+    "swr": "^0.3.8"
   }
 }
