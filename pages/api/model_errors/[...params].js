@@ -1,12 +1,12 @@
-import runQuery from '../../../lib/db'
-import {SQL} from 'sql-template-strings'
+// API endpoint to get model error data
+import runQuery from '../../../lib/db';
+import { SQL } from 'sql-template-strings';
 
-
-export default async function(req, res) {
-    const {
-        query: {params}
-    } = req
-    const data = await runQuery(SQL`
+export default async function (req, res) {
+  const {
+    query: { params },
+  } = req;
+  const data = await runQuery(SQL`
     SELECT
         model_short,
         super_region,
@@ -24,7 +24,6 @@ export default async function(req, res) {
             'Imperial',
             'SIKJalpha'
         )
-    `)
-    res.status(200).json({ data })
+    `);
+  res.status(200).json({ data });
 }
-
