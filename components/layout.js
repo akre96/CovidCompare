@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
       <br></br>
       <div className='container'>
         <main>{children}</main>
-      <footer style={{
+      <footer className="row" style={{
           marginTop: `2rem`
         }}>
         © {new Date().getFullYear()} Joseph Friedman, Patrick Liu, Samir Akre

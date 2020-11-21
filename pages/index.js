@@ -9,10 +9,9 @@ import CompareModelsLine from "../components/charts/CompareModelsLine"
 
 import loc_id_map from "../lib/loc_id_map.json"
 
-const fetcher = async (url) => {
+export const fetcher = async (url) => {
   const res = await fetch(url)
   const data = await res.json()
-
   if (res.status !== 200) {
     throw new Error(data.message)
   }

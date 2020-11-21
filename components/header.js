@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import React from "react"
 
 const Header = ({ siteTitle }) => (
-  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav className="navbar navbar-expand-md navbar-dark bg-dark">
     <div className='container'>
         <Link
           href="/"
@@ -29,7 +29,7 @@ const Header = ({ siteTitle }) => (
             </Link>
           </li>
           <li className="nav-item">
-            <Link href="/model-errors" className="nav-link">
+            <Link href="/model_errors" className="nav-link">
                 <a className="nav-link">
                     Model Errors
                 </a>
