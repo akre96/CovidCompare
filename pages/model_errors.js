@@ -3,7 +3,6 @@ import Select from 'react-select'
 import useSWR from 'swr'
 
 import { fetcher } from './index'
-import Layout from "../components/layout"
 import ErrHeatmap from '../components/charts/errHeatmap'
 
 const variableTypes = [
@@ -77,7 +76,7 @@ const ModelErrorPage = () => {
 
 
   return (
-    <Layout>
+    <>
       <h2>Historical Errors in Models</h2>
       <div className="row pb-2">
         <div className="col-md-6">
@@ -89,14 +88,14 @@ const ModelErrorPage = () => {
         </div>
       </div>
       <div className="row pb-2">
-        <div className="col-md-4">
+        <div className="col-md-4 pb-2">
           <h5>Error Metric</h5>
           <Select options={variableSelectList}
             defaultValue={variableSelectList[0]}
             onChange={(e) => setVariableType(e.value)}
           />
         </div>
-        <div className="col-md-4">
+        <div className="col-md-4 pb-2">
           <h5>Model Month</h5>
           <MonthSelect
             data={months} 
@@ -104,7 +103,7 @@ const ModelErrorPage = () => {
             errors={m_errors}
           />
         </div>
-        <div className="col-md-4">
+        <div className="col-md-4 pb-2">
           <h5>Error Type</h5>
           <Select options={errSelectList}
             defaultValue={errSelectList[0]}
@@ -122,7 +121,7 @@ const ModelErrorPage = () => {
           <strong>Loading...</strong>
         }
       </div>
-    </Layout>
+    </>
   )
   }
 

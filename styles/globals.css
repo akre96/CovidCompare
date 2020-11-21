@@ -1,6 +1,19 @@
 .nav-link {
   color: white;
 }
-.nav-link:hover {
+.navbar-brand a {
+  color: white;
+}
+.navbar-brand a:hover {
+  text-decoration: none;
+}
+.nav-link a {
+  color: white;
+}
+.white {
+  color: white;
+}
+.nav-link a:hover {
   color: gray;
+  text-decoration: none;
 }

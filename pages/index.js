@@ -4,7 +4,6 @@ import ToggleButton from 'react-bootstrap/ToggleButton'
 import Select from 'react-select'
 import useSWR from 'swr'
 
-import Layout from "../components/layout"
 import CompareModelsLine from "../components/charts/CompareModelsLine"
 
 import loc_id_map from "../lib/loc_id_map.json"
@@ -66,7 +65,7 @@ const IndexPage = () => {
   ))
 
   return (
-    <Layout>
+    <>
       <h2 className="h2 pb-1">Most Recent Model Predictions by Region</h2>
       <Select options={selectList}
         onChange={(e) => setCountry(e.value)}
@@ -84,7 +83,7 @@ const IndexPage = () => {
        {AxesToggle}
       </ToggleButtonGroup>
       <CountryChart data={data} errors={errors} />
-    </Layout>
+    </>
   )
 
 }

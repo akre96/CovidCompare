@@ -36,11 +36,13 @@ export default function ErrHeatmap({ data, region }){
     const transformedData = transformDataHeatmap(data, region)
 
     return ( 
+        <>
+        <strong>Forecast week</strong>
         <HeatMapGrid
             data={transformedData} 
             cellHeight="3rem" 
             cellStyle={(_x, _y, ratio) => ({
-                background: `rgb(12, 160, 44, ${ratio})`,
+                background: `rgb(194, 54, 22, ${ratio})`,
                 fontSize: ".8rem",
                 color: `rgb(0, 0, 0, ${ratio / 2 + 0.4})`
               })}
@@ -51,5 +53,6 @@ export default function ErrHeatmap({ data, region }){
             xLabels={xLabels} 
             yLabels={yLabels}
             />
+    </>
     )
 }
