@@ -24,6 +24,7 @@ export default async function (req, res) {
             'Imperial',
             'SIKJalpha'
         )
+        AND approach = 'monthly'
     `);
   res.status(200).json({ data });
 }

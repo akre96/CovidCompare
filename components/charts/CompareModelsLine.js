@@ -54,7 +54,7 @@ function rollingAverage(data, n, names) {
  * @param {bool} showRate - toggles showing deaths/day or cumulative deaths
  * @return {ReturnValueDataTypeHere} Brief description of the returning value here.
  */
-function CompareModelsLine({ height, data, showRate }) {
+function CompareModelsLine({ height, sqlData, showRate }) {
   // today used to draw reference line
   const today = dayjs().format('YYYY-MM-DD');
 
@@ -80,14 +80,43 @@ function CompareModelsLine({ height, data, showRate }) {
   // models and ground truth
   const base_names = [...model_names, 'truth'];
 
-  // Delete model predictions before today
-  data.map((d) => {
-    d.date = dayjs(d.date).format('YYYY-MM-DD');
+  // Delete model predictions before today, fill null days
+  const data = [...sqlData];
+  const dLength = data.length;
+  const toAdd = [];
+  data.map((d, i) => {
+    const date = dayjs(d.date);
+    d.date = date.format('YYYY-MM-DD');
+    var nextDay = date.add(1, 'day');
+    // Log date gaps to fill
+    if (i < dLength - 1) {
+      if (!dayjs(data[i + 1].date).isSame(nextDay, 'day')) {
+        toAdd.push({
+          index: i,
+          startDate: nextDay,
+          fillSize: (dayjs(data[i + 1].date) - nextDay) / 86400000,
+        });
+      }
+    }
     if (!dayjs().isBefore(d.date)) {
       names.map((m) => {
         d[m] = null;
       });
     }
+  });
+
+  // Fill date gaps
+  var add_index = 0;
+  toAdd.map((a) => {
+    const vals = Array(a.fillSize).fill(null);
+    const toFill = vals.map((v, j) => {
+      return {
+        date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
+        truth: v,
+      };
+    });
+    data.splice(a.index + add_index + 1, 0, ...toFill);
+    add_index += a.fillSize;
   });
 
   // Rolling average run on daily case rate. Lower and upper bounds not used for rate
@@ -221,7 +250,7 @@ function CompareModelsLine({ height, data, showRate }) {
 CompareModelsLine.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  data: PropTypes.object.isRequired,
+  sqlData: PropTypes.arrayOf(PropTypes.object).isRequired,
   showRate: PropTypes.bool.isRequired,
 };
 CompareModelsLine.defaultProps = {

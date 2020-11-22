@@ -33,19 +33,23 @@ function CountryChart({ data, errors, rate, selectedCountry }) {
   if (!data) return <div className="row">Loading...</div>;
   return (
     <div key={selectedCountry}>
-      <CompareModelsLine height={400} data={data.data} showRate={rate} />
+      <CompareModelsLine height={400} sqlData={data.data} showRate={rate} />
     </div>
   );
 }
 CountryChart.propTypes = {
   data: PropTypes.objectOf({
     data: PropTypes.arrayOf(PropTypes.object),
-  }).isRequired,
-  errors: PropTypes.object.isRequired,
+  }),
+  errors: PropTypes.object,
   // rate: show case rate per day
   rate: PropTypes.bool.isRequired,
   // selectedCountry: which region to present
   selectedCountry: PropTypes.string.isRequired,
+};
+CountryChart.defaultProps = {
+  data: null,
+  errors: null,
 };
 
 // Component that is returned for home page
@@ -66,8 +70,8 @@ export default function IndexPage() {
 
   // Y-axis toggle for cumulative vs per day deaths
   const axes = [
-    { name: 'Cumulative Deaths', value: 0 },
-    { name: 'Deaths Per Day', value: 1 },
+    { name: 'Cumulative Deaths', value: false },
+    { name: 'Deaths Per Day', value: true },
   ];
   const AxesToggle = axes.map((radio, idx) => (
     <ToggleButton

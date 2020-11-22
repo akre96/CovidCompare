@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
   );
 }
 MyApp.propTypes = {
-  Component: PropTypes.element.isRequired,
+  Component: PropTypes.object.isRequired,
   pageProps: PropTypes.object.isRequired,
 };
 

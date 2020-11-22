@@ -28,7 +28,7 @@ const superRegions = [
 function MonthSelect({ data, errors, onChange, value }) {
   if (errors) return 'Error loading available months';
   if (!data) {
-    return <Select options={[]} placeholder="Loading..." isLoading={true} />;
+    return <Select options={[]} defaultValue={value} placeholder="Loading..." isLoading={true} />;
   }
   const selectList = data.data.map((m) => ({ value: m.model_month, label: m.model_month }));
   return <Select options={selectList} defaultValue={value} onChange={onChange} />;
