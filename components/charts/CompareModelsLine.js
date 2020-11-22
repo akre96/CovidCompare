@@ -87,41 +87,43 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
   // Delete model predictions before today, fill null days
   const data = [...sqlData.data];
   const dLength = data.length;
-  const toAdd = [];
-  data.map((d, i) => {
-    const date = dayjs(d.date);
-    d.date = date.format('YYYY-MM-DD');
-    var nextDay = date.add(1, 'day');
-    // Log date gaps to fill
-    if (i < dLength - 1) {
-      if (!dayjs(data[i + 1].date).isSame(nextDay, 'day')) {
-        toAdd.push({
-          index: i,
-          startDate: nextDay,
-          fillSize: (dayjs(data[i + 1].date) - nextDay) / 86400000,
+  if (dLength > 0) {
+    const toAdd = [];
+    data.map((d, i) => {
+      const date = dayjs(d.date);
+      d.date = date.format('YYYY-MM-DD');
+      var nextDay = date.add(1, 'day');
+      // Log date gaps to fill
+      if (i < dLength - 1) {
+        if (!dayjs(data[i + 1].date).isSame(nextDay, 'day')) {
+          toAdd.push({
+            index: i,
+            startDate: nextDay,
+            fillSize: (dayjs(data[i + 1].date) - nextDay) / 86400000,
+          });
+        }
+      }
+      if (!dayjs().isBefore(d.date)) {
+        names.map((m) => {
+          d[m] = null;
         });
       }
-    }
-    if (!dayjs().isBefore(d.date)) {
-      names.map((m) => {
-        d[m] = null;
-      });
-    }
-  });
-
-  // Fill date gaps
-  var add_index = 0;
-  toAdd.map((a) => {
-    const vals = Array(a.fillSize).fill(null);
-    const toFill = vals.map((v, j) => {
-      return {
-        date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
-        truth: v,
-      };
     });
-    data.splice(a.index + add_index + 1, 0, ...toFill);
-    add_index += a.fillSize;
-  });
+
+    // Fill date gaps
+    var add_index = 0;
+    toAdd.map((a) => {
+      const vals = Array(a.fillSize).fill(null);
+      const toFill = vals.map((v, j) => {
+        return {
+          date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
+          truth: v,
+        };
+      });
+      data.splice(a.index + add_index + 1, 0, ...toFill);
+      add_index += a.fillSize;
+    });
+  }
 
   // Rolling average run on daily case rate. Lower and upper bounds not used for rate
   const rate_data = rollingAverage(
