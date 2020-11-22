@@ -81,7 +81,7 @@ function CompareModelsLine({ height, sqlData, showRate }) {
   const base_names = [...model_names, 'truth'];
 
   // Delete model predictions before today, fill null days
-  const data = [...sqlData];
+  const data = [...sqlData.data];
   const dLength = data.length;
   const toAdd = [];
   data.map((d, i) => {
@@ -250,12 +250,15 @@ function CompareModelsLine({ height, sqlData, showRate }) {
 CompareModelsLine.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  sqlData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sqlData: PropTypes.shape({
+    data: PropTypes.array,
+  }),
   showRate: PropTypes.bool.isRequired,
 };
 CompareModelsLine.defaultProps = {
   width: null,
   height: 500,
+  sqlData: { data: [] },
 };
 
 export default CompareModelsLine;

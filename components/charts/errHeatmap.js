@@ -31,7 +31,7 @@ function ErrHeatmap({ data, region }) {
   const transformedData = transformDataHeatmap(data, region);
 
   return (
-    <>
+    <div className="hmap">
       <strong>Forecast week</strong>
       <HeatMapGrid
         data={transformedData}
@@ -46,7 +46,7 @@ function ErrHeatmap({ data, region }) {
         xLabels={xLabels}
         yLabels={yLabels}
       />
-    </>
+    </div>
   );
 }
 ErrHeatmap.propTypes = {

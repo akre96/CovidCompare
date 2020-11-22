@@ -33,13 +33,13 @@ function CountryChart({ data, errors, rate, selectedCountry }) {
   if (!data) return <div className="row">Loading...</div>;
   return (
     <div key={selectedCountry}>
-      <CompareModelsLine height={400} sqlData={data.data} showRate={rate} />
+      <CompareModelsLine height={400} sqlData={data} showRate={rate} />
     </div>
   );
 }
 CountryChart.propTypes = {
-  data: PropTypes.objectOf({
-    data: PropTypes.arrayOf(PropTypes.object),
+  data: PropTypes.shape({
+    data: PropTypes.array,
   }),
   errors: PropTypes.object,
   // rate: show case rate per day
@@ -105,7 +105,7 @@ export default function IndexPage() {
       >
         {AxesToggle}
       </ToggleButtonGroup>
-      <CountryChart data={data} errors={errors} rate={rate} selectedCountry={selectedCountry} />
+      <CompareModelsLine height={400} sqlData={data} showRate={rate} />
     </>
   );
 }

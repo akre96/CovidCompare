@@ -17,3 +17,10 @@
   color: gray;
   text-decoration: none;
 }
+
+@media only screen and (max-width: 767px) {
+  .hmap {
+    max-width: 100%;
+    overflow-x: scroll;
+  }
+}

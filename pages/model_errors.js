@@ -34,12 +34,16 @@ function MonthSelect({ data, errors, onChange, value }) {
   return <Select options={selectList} defaultValue={value} onChange={onChange} />;
 }
 MonthSelect.propTypes = {
-  data: PropTypes.objectOf({
-    data: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
+  data: PropTypes.shape({
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        model_month: PropTypes.string,
+      }),
+    ),
+  }),
   errors: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.objectOf({
+  value: PropTypes.shape({
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   }).isRequired,
