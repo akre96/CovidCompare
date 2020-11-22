@@ -105,7 +105,7 @@ export default function IndexPage() {
       >
         {AxesToggle}
       </ToggleButtonGroup>
-      <CompareModelsLine height={400} sqlData={data} showRate={rate} />
+      <CompareModelsLine height={400} errors={errors} sqlData={data} showRate={rate} />
     </>
   );
 }

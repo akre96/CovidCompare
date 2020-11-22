@@ -45,6 +45,15 @@ function rollingAverage(data, n, names) {
   });
 }
 
+// available models and their colors
+const models = [
+  { name: 'Delphi', color: '#e84118', active: true },
+  { name: 'IHME_MS_SEIR', color: '#44bd32', active: true },
+  { name: 'Imperial', color: '#8c7ae6', active: true },
+  { name: 'LANL', color: '#0097e6', active: true },
+  { name: 'SIKJalpha', color: '#e1b12c', active: true },
+];
+
 /** 
  * Chart to compare models
  * @summary Compare different predictive models either cumulative deaths or per day as a line chart with errors if available. 
@@ -54,18 +63,13 @@ function rollingAverage(data, n, names) {
  * @param {bool} showRate - toggles showing deaths/day or cumulative deaths
  * @return {ReturnValueDataTypeHere} Brief description of the returning value here.
  */
-function CompareModelsLine({ height, sqlData, showRate }) {
+function CompareModelsLine({ height, sqlData, showRate, errors }) {
+  // React Hook for which models to display
+  const [activeModels, setModels] = useState(models);
+
+  if (errors) return 'Error encountered';
   // today used to draw reference line
   const today = dayjs().format('YYYY-MM-DD');
-
-  // available models and their colors
-  const models = [
-    { name: 'Delphi', color: '#e84118', active: true },
-    { name: 'IHME_MS_SEIR', color: '#44bd32', active: true },
-    { name: 'Imperial', color: '#8c7ae6', active: true },
-    { name: 'LANL', color: '#0097e6', active: true },
-    { name: 'SIKJalpha', color: '#e1b12c', active: true },
-  ];
 
   // just names of models
   const model_names = models.map((m) => m.name);
@@ -152,9 +156,6 @@ function CompareModelsLine({ height, sqlData, showRate }) {
       d[`${m}_range`] = [d[`${m}_l`], d[`${m}_u`]];
     });
   });
-
-  // React Hook for which models to display
-  const [activeModels, setModels] = useState(models);
 
   // Checkboxes to plot/hide model predictions
   const ModelCheckboxes = activeModels.map((m, i) => (
@@ -253,6 +254,7 @@ CompareModelsLine.propTypes = {
   sqlData: PropTypes.shape({
     data: PropTypes.array,
   }),
+  errors: PropTypes.object,
   showRate: PropTypes.bool.isRequired,
 };
 CompareModelsLine.defaultProps = {
