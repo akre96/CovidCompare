@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 
 const Header = ({ siteTitle }) => (
-  <Navbar variant="dark" bg="dark" expand="md">
+  <Navbar variant="dark" bg="dark" expand="lg">
     <Container>
       <Navbar.Brand style={{ fontSize: '2em' }}>
         <Link href="/">{siteTitle}</Link>
@@ -20,6 +20,9 @@ const Header = ({ siteTitle }) => (
           </Link>
           <Link href="/model_errors" className="" passHref>
             <Nav.Link active>Model Errors</Nav.Link>
+          </Link>
+          <Link href="/prediction_error" className="" passHref>
+            <Nav.Link active>All Predictions</Nav.Link>
           </Link>
           <Link href="/about" className="" passHref>
             <Nav.Link active>About</Nav.Link>

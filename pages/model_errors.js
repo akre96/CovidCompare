@@ -3,7 +3,7 @@ import Select from 'react-select';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
 
-import { fetcher } from './index';
+import fetcher from '../lib/fetcher';
 import ErrHeatmap from '../components/charts/errHeatmap';
 
 const variableTypes = [

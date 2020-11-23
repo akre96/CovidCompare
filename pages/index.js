@@ -8,24 +8,11 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import Select from 'react-select';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
+import fetcher from '../lib/fetcher';
 
 import CompareModelsLine from '../components/charts/CompareModelsLine';
 
 import loc_id_map from '../assets/loc_id_map.json';
-
-/**
- * Get result frrom api call and throw error if applicable
- * @param {string} url - url for API call
- * @return {object} - intended data returned
- */
-export const fetcher = async (url) => {
-  const res = await fetch(url);
-  const data = await res.json();
-  if (res.status !== 200) {
-    throw new Error(data.message);
-  }
-  return data;
-};
 
 // Displays graph of data prediction if data available
 function CountryChart({ data, errors, rate, selectedCountry }) {

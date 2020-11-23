@@ -19,8 +19,12 @@ export default async function (req, res) {
   const data = await runQuery(SQL`
         SELECT
             forecast.date,
-            forecast.mean
-        FROM forecast
+            forecast.mean,
+            truth.truth
+        FROM (forecast 
+          LEFT JOIN truth
+          ON forecast.date = truth.date
+          AND forecast.ihme_loc_id = truth.ihme_loc_id)
         WHERE forecast.ihme_loc_id = ${params[0]}
         AND forecast.model_short = ${params[1]}
         ORDER BY date
