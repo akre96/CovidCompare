@@ -16,43 +16,9 @@ import {
 } from 'recharts';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-
-// calculate an n day rolling average
-function rollingAverage(data, n, names) {
-  return data.map((d, i) => {
-    let rd = { ...d };
-    if (i < n) {
-      names.map((m) => {
-        rd[m] = null;
-      });
-    } else {
-      names.map((m) => {
-        if (d[m] != null) {
-          let c = 0;
-          let avg = 0;
-          for (let j = i - n; j <= i; j++) {
-            if (data[j][m] != null) {
-              avg += data[j][m];
-              c += 1;
-            }
-          }
-          avg = avg / c;
-          rd[m] = avg;
-        }
-      });
-    }
-    return rd;
-  });
-}
-
-// available models and their colors
-const models = [
-  { name: 'Delphi', color: '#e84118', active: true },
-  { name: 'IHME_MS_SEIR', color: '#44bd32', active: true },
-  { name: 'Imperial', color: '#8c7ae6', active: true },
-  { name: 'LANL', color: '#0097e6', active: true },
-  { name: 'SIKJalpha', color: '#e1b12c', active: true },
-];
+import models from '../../assets/models';
+import rollingAverage from '../../lib/rollingAverage';
+import caseRate from '../../lib/caseRate';
 
 /** 
  * Chart to compare models
@@ -103,6 +69,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
           });
         }
       }
+      // filter prediction data before today
       if (!dayjs().isBefore(d.date)) {
         names.map((m) => {
           d[m] = null;
@@ -127,28 +94,8 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
 
   // Rolling average run on daily case rate. Lower and upper bounds not used for rate
   const rate_data = rollingAverage(
-    // Calculate daily case rate
-    data.map((d, i) => {
-      let rd = { ...d };
-
-      // first data point set to null
-      if (i === 0) {
-        base_names.map((m) => {
-          rd[m] = null;
-        });
-      } else {
-        // if consecutive not-null points get case difference
-        base_names.map((m) => {
-          if ((d[m] != null) & (data[i - 1][m] != null)) {
-            rd[m] = d[m] - data[i - 1][m];
-          } else {
-            rd[m] = null;
-          }
-        });
-      }
-      return rd;
-    }),
-    7,
+    caseRate(data, base_names),
+    7, // seven days
     base_names,
   );
 

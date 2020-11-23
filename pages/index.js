@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 
 import CompareModelsLine from '../components/charts/CompareModelsLine';
 
-import loc_id_map from '../lib/loc_id_map.json';
+import loc_id_map from '../assets/loc_id_map.json';
 
 /**
  * Get result frrom api call and throw error if applicable
