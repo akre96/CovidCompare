@@ -88,6 +88,12 @@ export default function IndexPage() {
 
   return (
     <>
+      <p>
+        <i>
+          Framework for Comparing the Predictive Performance of International COVID-19 Mortality
+          Forecasting Models
+        </i>
+      </p>
       <h2 className="h2 pb-1">Most Recent Model Predictions by Region</h2>
       <Select
         options={selectList}

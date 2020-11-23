@@ -9,15 +9,8 @@
     "lint": "eslint --fix"
   },
   "dependencies": {
-    "@mysql/xdevapi": "8.0.22",
-    "babel-eslint": "^10.1.0",
     "bootstrap": "^4.5.3",
     "dayjs": "^1.9.6",
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4.2.0",
     "jquery": "^3.5.1",
     "mysql2": "^2.2.5",
     "next": "10.0.1",
@@ -27,10 +20,19 @@
     "react-bootstrap": "^1.4.0",
     "react-dom": "17.0.1",
     "react-grid-heatmap": "^1.0.1",
+    "react-markdown": "^5.0.3",
     "react-select": "^3.1.0",
     "recharts": "^1.8.5",
     "serverless-mysql": "^1.5.4",
     "sql-template-strings": "^2.2.2",
     "swr": "^0.3.8"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }
