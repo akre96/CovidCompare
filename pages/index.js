@@ -61,6 +61,9 @@ export default function IndexPage() {
   // find location id and call api for data
   const loc_id = loc_id_map[selectedCountry];
   const { data, errors } = useSWR('/api/predictions/' + loc_id, fetcher);
+  if (errors) {
+    return <h3>Error collecting data</h3>;
+  }
 
   // List of possible regions
   const selectList = Object.keys(loc_id_map).map((loc) => ({

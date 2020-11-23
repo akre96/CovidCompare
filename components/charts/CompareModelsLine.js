@@ -87,8 +87,8 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
   // Delete model predictions before today, fill null days
   const data = [...sqlData.data];
   const dLength = data.length;
+  const toAdd = [];
   if (dLength > 0) {
-    const toAdd = [];
     data.map((d, i) => {
       const date = dayjs(d.date);
       d.date = date.format('YYYY-MM-DD');
@@ -113,13 +113,13 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
     // Fill date gaps
     var add_index = 0;
     toAdd.map((a) => {
-      const vals = Array(a.fillSize).fill(null);
-      const toFill = vals.map((v, j) => {
-        return {
+      const toFill = [];
+      for (let j = 0; j < a.fillSize; j++) {
+        toFill.push({
           date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
-          truth: v,
-        };
-      });
+          truth: null,
+        });
+      }
       data.splice(a.index + add_index + 1, 0, ...toFill);
       add_index += a.fillSize;
     });
