@@ -32,6 +32,5 @@ export default async function (req, res) {
         AND truth.ihme_loc_id = currentforecast.ihme_loc_id)
         WHERE currentforecast.ihme_loc_id = ${region}
     `);
-  console.log(data);
   res.status(200).json({ data });
 }

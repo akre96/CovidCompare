@@ -87,8 +87,8 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
   // Delete model predictions before today, fill null days
   const data = [...sqlData.data];
   const dLength = data.length;
+  const toAdd = [];
   if (dLength > 0) {
-    const toAdd = [];
     data.map((d, i) => {
       const date = dayjs(d.date);
       d.date = date.format('YYYY-MM-DD');
