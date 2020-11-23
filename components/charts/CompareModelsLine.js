@@ -121,7 +121,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
         };
       });
       //data.splice(a.index + add_index + 1, 0, ...toFill);
-      add_index += a.fillSize;
+      //add_index += a.fillSize;
     });
   }
 
