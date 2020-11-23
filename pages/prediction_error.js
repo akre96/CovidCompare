@@ -35,7 +35,7 @@ const ModelPredictionErrorPage = () => {
     fetcher,
   );
   if (error) {
-    return 'SQL Error Encountered';
+    return 'SQL Error Encountered. Try refresing your browser.';
   }
 
   return (
