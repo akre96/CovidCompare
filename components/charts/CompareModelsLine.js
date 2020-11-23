@@ -113,17 +113,15 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
     // Fill date gaps
     var add_index = 0;
     toAdd.map((a) => {
-      const vals = Array(a.fillSize).fill(null);
-      /*
-      const toFill = vals.map((v, j) => {
-        return {
+      const toFill = [];
+      for (let j = 0; j < fillSize; j++) {
+        toFill.push({
           date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
-          truth: v,
-        };
-      });
-      */
-      //data.splice(a.index + add_index + 1, 0, ...toFill);
-      //add_index += a.fillSize;
+          truth: null,
+        });
+      }
+      data.splice(a.index + add_index + 1, 0, ...toFill);
+      add_index += a.fillSize;
     });
   }
 
