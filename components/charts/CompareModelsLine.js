@@ -114,12 +114,14 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
     var add_index = 0;
     toAdd.map((a) => {
       const vals = Array(a.fillSize).fill(null);
+      /*
       const toFill = vals.map((v, j) => {
         return {
           date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
           truth: v,
         };
       });
+      */
       //data.splice(a.index + add_index + 1, 0, ...toFill);
       //add_index += a.fillSize;
     });
