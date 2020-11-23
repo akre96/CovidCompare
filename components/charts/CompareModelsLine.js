@@ -65,6 +65,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
           toAdd.push({
             index: i,
             startDate: nextDay,
+            // converts time diff to days
             fillSize: (dayjs(data[i + 1].date) - nextDay) / 86400000,
           });
         }

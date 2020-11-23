@@ -18,10 +18,8 @@ export default async function (req, res) {
 `);
   const data = await runQuery(SQL`
         SELECT
-            forecast.ihme_loc_id,
             forecast.date,
-            forecast.mean,
-            forecast.model_date
+            forecast.mean
         FROM forecast
         WHERE forecast.ihme_loc_id = ${params[0]}
         AND forecast.model_short = ${params[1]}

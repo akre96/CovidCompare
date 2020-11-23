@@ -17,16 +17,14 @@ import {
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import models from '../../assets/models';
-import rollingAverage from '../../lib/rollingAverage';
-import caseRate from '../../lib/caseRate';
 
 function ModelErrorLine({ sqlData }) {
   const truthData = sqlData.truth.map((t) => ({
-    date: dayjs(t.date).valueOf(),
+    date: dayjs(t.date).valueOf() / 86400000,
     cases: t.truth,
   }));
   const modelData = sqlData.data.map((d) => ({
-    date: dayjs(d.date).valueOf(),
+    date: dayjs(d.date).valueOf() / 86400000,
     cases: d.mean,
   }));
   const data = [...sqlData.data];
@@ -34,10 +32,15 @@ function ModelErrorLine({ sqlData }) {
     <ResponsiveContainer height={200}>
       <ScatterChart data={data}>
         <CartesianGrid strokeDasharray="5 5" />
-        <XAxis dataKey="date" tickFormatter={(v) => dayjs(v).format('MMM DD')} />
+        <XAxis
+          type="number"
+          dataKey="date"
+          tickFormatter={(v) => dayjs(Math.round(v * 86400000)).format('MMM DD')}
+          domain={[truthData[0].date, modelData.slice(-1)[0].date ]}
+        />
         <YAxis dataKey="cases" />
-        <Scatter data={truthData} fill="#000000" />
         <Scatter data={modelData} fill="#e74c3c" />
+        <Scatter data={truthData} fill="#000000" />
         <Tooltip />
       </ScatterChart>
     </ResponsiveContainer>
