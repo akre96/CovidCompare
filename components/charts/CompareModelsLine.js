@@ -111,6 +111,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
     });
 
     // Fill date gaps
+    /*
     var add_index = 0;
     toAdd.map((a) => {
       const vals = Array(a.fillSize).fill(null);
@@ -123,6 +124,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
       data.splice(a.index + add_index + 1, 0, ...toFill);
       add_index += a.fillSize;
     });
+  */
   }
 
   // Rolling average run on daily case rate. Lower and upper bounds not used for rate
