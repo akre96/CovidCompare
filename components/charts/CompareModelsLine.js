@@ -114,7 +114,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
     var add_index = 0;
     toAdd.map((a) => {
       const toFill = [];
-      for (let j = 0; j < fillSize; j++) {
+      for (let j = 0; j < a.fillSize; j++) {
         toFill.push({
           date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
           truth: null,
