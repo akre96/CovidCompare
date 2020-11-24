@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import useSWR from 'swr';
-import PropTypes from 'prop-types';
 
 import fetcher from '../lib/fetcher';
 import ModelErrorLine from '../components/charts/modelErrorLine';

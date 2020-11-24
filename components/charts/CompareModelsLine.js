@@ -29,13 +29,13 @@ import caseRate from '../../lib/caseRate';
  * @param {bool} showRate - toggles showing deaths/day or cumulative deaths
  * @return {ReturnValueDataTypeHere} Brief description of the returning value here.
  */
-function CompareModelsLine({ height, sqlData, showRate, errors }) {
+function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
   // React Hook for which models to display
   const [activeModels, setModels] = useState(models);
 
   if (errors) return 'Error encountered';
   // today used to draw reference line
-  const today = dayjs().format('YYYY-MM-DD');
+  const today = dayjs().valueOf();
 
   // just names of models
   const model_names = models.map((m) => m.name);
@@ -57,7 +57,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
   if (dLength > 0) {
     data.map((d, i) => {
       const date = dayjs(d.date);
-      d.date = date.format('YYYY-MM-DD');
+      d.date = date.valueOf();
       var nextDay = date.add(1, 'day');
       // Log date gaps to fill
       if (i < dLength - 1) {
@@ -84,7 +84,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
       const toFill = [];
       for (let j = 0; j < a.fillSize; j++) {
         toFill.push({
-          date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
+          date: a.startDate.add(j, 'days').valueOf(),
           truth: null,
         });
       }
@@ -170,11 +170,16 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
       <ResponsiveContainer height={height}>
         <ComposedChart data={showRate ? rate_data : data}>
           <CartesianGrid strokeDasharray="5 5" />
-          <XAxis dataKey="date" tickFormatter={(v) => dayjs(v).format('MMM DD')} />
-          {!showRate && model_errors}
+          <XAxis
+            domain={[data[0].date, data.splice(-1)[0].date]}
+            type="number"
+            dataKey="date"
+            tickFormatter={(v) => dayjs(v).format('MMM DD')}
+          />
+          {!showRate && showCI && model_errors}
           {model_lines}
           <Line
-            name="Recorded Cases"
+            name="Deaths"
             type="monotone"
             dataKey="truth"
             stroke="black"
@@ -206,11 +211,12 @@ CompareModelsLine.propTypes = {
   }),
   errors: PropTypes.object,
   showRate: PropTypes.bool.isRequired,
+  showCI: PropTypes.bool.isRequired,
 };
 CompareModelsLine.defaultProps = {
   width: null,
   height: 500,
-  sqlData: { data: [] },
+  sqlData: { data: [{ date: dayjs.valueOf() }] },
 };
 
 export default CompareModelsLine;

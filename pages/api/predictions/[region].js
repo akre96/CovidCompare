@@ -31,6 +31,7 @@ export default async function (req, res) {
         ON (truth.date = currentforecast.date
         AND truth.ihme_loc_id = currentforecast.ihme_loc_id)
         WHERE currentforecast.ihme_loc_id = ${region}
+        ORDER BY date
     `);
   res.status(200).json({ data });
 }

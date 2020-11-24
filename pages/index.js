@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import Button from 'react-bootstrap/Button';
 import Select from 'react-select';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
@@ -44,6 +45,7 @@ export default function IndexPage() {
   // React Hooks for current country and y-axis
   const [selectedCountry, setCountry] = useState('United States');
   const [rate, setRate] = useState(false);
+  const [showCI, setCI] = useState(false);
 
   // find location id and call api for data
   const loc_id = loc_id_map[selectedCountry];
@@ -92,16 +94,37 @@ export default function IndexPage() {
       />
       <br />
       <h3>{selectedCountry}</h3>
-      <ToggleButtonGroup
-        type="radio"
-        name="y-axis"
-        onChange={(e) => setRate(e)}
-        value={rate}
-        className="mb-2"
-      >
-        {AxesToggle}
-      </ToggleButtonGroup>
-      <CompareModelsLine height={400} errors={errors} sqlData={data} showRate={rate} />
+      <div className="row">
+        <div className="col-sm-6">
+          <ToggleButtonGroup
+            type="radio"
+            name="y-axis"
+            onChange={(e) => setRate(e)}
+            value={rate}
+            className="mb-2 float-sm-left"
+          >
+            {AxesToggle}
+          </ToggleButtonGroup>
+        </div>
+        <div className="col-sm-6">
+          <Button
+            className="float-sm-right"
+            variant={showCI ? 'outline-secondary' : 'secondary'}
+            onClick={(e) => {
+              setCI(!showCI);
+            }}
+          >
+            {showCI ? 'Hide Confidence Intervals' : 'Show Confidence Intervals'}
+          </Button>
+        </div>
+      </div>
+      <CompareModelsLine
+        showCI={showCI}
+        height={400}
+        errors={errors}
+        sqlData={data}
+        showRate={rate}
+      />
     </>
   );
 }

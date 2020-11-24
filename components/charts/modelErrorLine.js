@@ -84,7 +84,7 @@ ModelErrorLine.propTypes = {
   name: PropTypes.string.isRequired,
 };
 ModelErrorLine.defaultProps = {
-  sqlData: { data: [], truth: [] },
+  sqlData: { data: [{date: dayjs().valueOf()}], truth: [{date: dayjs().valueOf()}] },
 };
 
 export default ModelErrorLine;
