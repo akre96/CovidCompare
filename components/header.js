@@ -18,10 +18,10 @@ const Header = ({ siteTitle }) => (
           <Link href="/" className="" passHref>
             <Nav.Link active>Current Forecasts</Nav.Link>
           </Link>
-          <Link href="/model_errors" className="" passHref>
+          <Link href="/model_performance" className="" passHref>
             <Nav.Link active>Model Performance</Nav.Link>
           </Link>
-          <Link href="/prediction_error" className="" passHref>
+          <Link href="/historical_forecasts" className="" passHref>
             <Nav.Link active>Historical Forecasts</Nav.Link>
           </Link>
           <Link href="/about" className="" passHref>
