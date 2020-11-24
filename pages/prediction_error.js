@@ -39,7 +39,8 @@ const ModelPredictionErrorPage = () => {
 
   return (
     <>
-      <h2>All Model Predictions vs Truth</h2>
+      <h2>Historical Forecasts</h2>
+      <p>All COVID-19 Forecasts and Errors</p>
       <p>
         <i>Warning:</i> May be slow to load
       </p>

@@ -80,35 +80,30 @@ export default function IndexPage() {
 
   return (
     <>
-      <p>
-        <i>
-          Framework for Comparing the Predictive Performance of International COVID-19 Mortality
-          Forecasting Models
-        </i>
-      </p>
-      <h2 className="h2 pb-1">Most Recent Model Predictions by Region</h2>
+      <h2 className="h2 pb-1">Current COVID-19 Forecasts</h2>
+      <p>Compare what international COVID-19 forecasts are predicting</p>
       <Select
         options={selectList}
         onChange={(e) => setCountry(e.value)}
-        placeholder={'Select Region...'}
+        placeholder={'Select Country or US State...'}
       />
       <br />
       <h3>{selectedCountry}</h3>
       <div className="row">
-        <div className="col-sm-6">
+        <div className="col-sm-6 col-md-4">
           <ToggleButtonGroup
             type="radio"
             name="y-axis"
             onChange={(e) => setRate(e)}
             value={rate}
-            className="mb-2 float-sm-left"
+            className="mb-2 float-md-left"
           >
             {AxesToggle}
           </ToggleButtonGroup>
         </div>
         <div className="col-sm-6">
           <Button
-            className="float-sm-right"
+            className="float-md-right"
             variant={showCI ? 'outline-secondary' : 'secondary'}
             onClick={(e) => {
               setCI(!showCI);

@@ -20,6 +20,7 @@ export default async function (req, res) {
         SELECT
             forecast.date,
             forecast.mean,
+            forecast.model_date,
             truth.truth
         FROM (forecast 
           LEFT JOIN truth

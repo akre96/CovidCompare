@@ -16,13 +16,13 @@ const Header = ({ siteTitle }) => (
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           <Link href="/" className="" passHref>
-            <Nav.Link active>Current Forecast</Nav.Link>
+            <Nav.Link active>Current Forecasts</Nav.Link>
           </Link>
           <Link href="/model_errors" className="" passHref>
-            <Nav.Link active>Model Errors</Nav.Link>
+            <Nav.Link active>Model Performance</Nav.Link>
           </Link>
           <Link href="/prediction_error" className="" passHref>
-            <Nav.Link active>All Predictions</Nav.Link>
+            <Nav.Link active>Historical Forecasts</Nav.Link>
           </Link>
           <Link href="/about" className="" passHref>
             <Nav.Link active>About</Nav.Link>

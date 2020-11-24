@@ -126,7 +126,9 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
         }}
       />
       <label className="form-check-label" htmlFor={m.name}>
-        <strong style={{ color: m.color }}>{m.name}</strong>
+        <a href={m.link} rel="noreferrer" target="_blank">
+          <strong style={{ color: m.color }}>{m.name}</strong>
+        </a>
       </label>
     </div>
   ));
@@ -165,39 +167,58 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
       return [null, null];
     }
   }
+  function labelFormatter(l) {
+    const date = dayjs(l);
+    if (date.isBefore(today)) {
+      return date.format('MMM DD YYYY');
+    }
+    const nweeks = ((date - today) / 86400000 / 7).toFixed(1);
+    return `${nweeks} weeks ahead`;
+  }
+  function yTickFormatter(v) {
+    if (showRate) return v;
+    if (v === 0) return v;
+    return `${(v / 1000).toFixed(1)}k`;
+  }
   return (
     <>
-      <ResponsiveContainer height={height}>
-        <ComposedChart data={showRate ? rate_data : data}>
-          <CartesianGrid strokeDasharray="5 5" />
-          <XAxis
-            domain={[data[0].date, data.splice(-1)[0].date]}
-            type="number"
-            dataKey="date"
-            tickFormatter={(v) => dayjs(v).format('MMM DD')}
-          />
-          {!showRate && showCI && model_errors}
-          {model_lines}
-          <Line
-            name="Deaths"
-            type="monotone"
-            dataKey="truth"
-            stroke="black"
-            dot={false}
-            strokeWidth={2}
-          />
-          <YAxis type="number" />
-          <ReferenceLine x={today} stroke="black" strokeWidth={2} />
-          <Tooltip
-            formatter={tooltipFormatter}
-            labelFormatter={(l) => dayjs(l).format('MMM DD YYYY')}
-            labelStyle={{ fontWeight: 'bold' }}
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
-      <div className={'form-group'} style={{ textAlign: 'center' }}>
-        <h5>Models</h5>
-        {ModelCheckboxes}
+      <div className="row">
+        <div className="col-md-10">
+          <ResponsiveContainer height={height}>
+            <ComposedChart data={showRate ? rate_data : data}>
+              <CartesianGrid strokeDasharray="5 5" />
+              <XAxis
+                domain={[data[0].date, data.splice(-1)[0].date]}
+                type="number"
+                dataKey="date"
+                tickFormatter={(v) => dayjs(v).format('MMM DD')}
+              />
+              {!showRate && showCI && model_errors}
+              {model_lines}
+              <Line
+                name="Recorded Mortality"
+                type="monotone"
+                dataKey="truth"
+                stroke="black"
+                dot={false}
+                strokeWidth={2}
+              />
+              <YAxis type="number" tickFormatter={yTickFormatter} />
+              <ReferenceLine x={today} stroke="black" strokeWidth={2} />
+              <Tooltip
+                formatter={tooltipFormatter}
+                labelFormatter={labelFormatter}
+                labelStyle={{ fontWeight: 'bold' }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="col-md-2">
+          <div className={'form-group'} style={{ textAlign: 'left' }}>
+            <h5>Modeling Group</h5>
+            {ModelCheckboxes}
+          </div>
+        </div>
       </div>
     </>
   );

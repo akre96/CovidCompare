@@ -7,9 +7,9 @@ import fetcher from '../lib/fetcher';
 import ErrHeatmap from '../components/charts/errHeatmap';
 
 const variableTypes = [
+  'Median Absolute Percent Error',
   'Median Error',
   'Median Absolute Error',
-  'Median Absolute Percent Error',
   'Median Percent Error',
 ];
 const errTypes = ['Total Cumulative Error', 'Weekly Error'];
@@ -52,9 +52,9 @@ MonthSelect.propTypes = {
 const ModelErrorPage = () => {
   // React hook paramaters for data selection
   const [modelMonth, setMonth] = useState('Oct');
-  const [errType, setErrType] = useState('Total Cumulative Error');
-  const [variableType, setVariableType] = useState('Median Absolute Percent Error');
-  const [superRegion, setSuperRegion] = useState('Global');
+  const [errType, setErrType] = useState(errTypes[0]);
+  const [variableType, setVariableType] = useState(variableTypes[0]);
+  const [superRegion, setSuperRegion] = useState(superRegions[0]);
 
   const { data: months, errors: m_errors } = useSWR('/api/model_errors/available_months', fetcher);
   const { data: errData } = useSWR(
@@ -71,10 +71,11 @@ const ModelErrorPage = () => {
 
   return (
     <>
-      <h2>Historical Errors in Models</h2>
+      <h2>How have the models performed?</h2>
+      <p>Compare the predictive performance of forecasting models over time</p>
       <div className="row pb-2">
         <div className="col-md-6">
-          <h5>Super Region</h5>
+          <h5>Region</h5>
           <Select
             options={regionSelectList}
             defaultValue={regionSelectList[0]}
