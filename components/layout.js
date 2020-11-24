@@ -6,19 +6,27 @@ import Header from './header';
 const Layout = ({ children }) => {
   return (
     <>
-      <Header siteTitle={`COVID Compare`} />
+      <Header siteTitle={`covidcompare`} />
       <br></br>
       <div className="container">
         <main>{children}</main>
+      </div>
         <footer
           className="row"
           style={{
             marginTop: `2rem`,
           }}
         >
+          <div className="container">
+            <p>
           © {new Date().getFullYear()} Joseph Friedman, Patrick Liu, Samir Akre
+            </p>
+            <p>
+              Last Updated November 2020
+            </p>
+
+          </div>
         </footer>
-      </div>
     </>
   );
 };

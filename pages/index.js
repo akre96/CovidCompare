@@ -5,27 +5,15 @@
 import React, { useState } from 'react';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import Button from 'react-bootstrap/Button';
 import Select from 'react-select';
 import useSWR from 'swr';
 import PropTypes from 'prop-types';
+import fetcher from '../lib/fetcher';
 
 import CompareModelsLine from '../components/charts/CompareModelsLine';
 
-import loc_id_map from '../lib/loc_id_map.json';
-
-/**
- * Get result frrom api call and throw error if applicable
- * @param {string} url - url for API call
- * @return {object} - intended data returned
- */
-export const fetcher = async (url) => {
-  const res = await fetch(url);
-  const data = await res.json();
-  if (res.status !== 200) {
-    throw new Error(data.message);
-  }
-  return data;
-};
+import loc_id_map from '../assets/loc_id_map.json';
 
 // Displays graph of data prediction if data available
 function CountryChart({ data, errors, rate, selectedCountry }) {
@@ -57,6 +45,7 @@ export default function IndexPage() {
   // React Hooks for current country and y-axis
   const [selectedCountry, setCountry] = useState('United States');
   const [rate, setRate] = useState(false);
+  const [showCI, setCI] = useState(false);
 
   // find location id and call api for data
   const loc_id = loc_id_map[selectedCountry];
@@ -91,30 +80,46 @@ export default function IndexPage() {
 
   return (
     <>
-      <p>
-        <i>
-          Framework for Comparing the Predictive Performance of International COVID-19 Mortality
-          Forecasting Models
-        </i>
-      </p>
-      <h2 className="h2 pb-1">Most Recent Model Predictions by Region</h2>
+      <h2 className="h2 pb-1">Current COVID-19 Forecasts</h2>
+      <p>Compare what international COVID-19 forecasts are predicting</p>
       <Select
         options={selectList}
         onChange={(e) => setCountry(e.value)}
-        placeholder={'Select Region...'}
+        placeholder={'Select Country or US State...'}
       />
       <br />
       <h3>{selectedCountry}</h3>
-      <ToggleButtonGroup
-        type="radio"
-        name="y-axis"
-        onChange={(e) => setRate(e)}
-        value={rate}
-        className="mb-2"
-      >
-        {AxesToggle}
-      </ToggleButtonGroup>
-      <CompareModelsLine height={400} errors={errors} sqlData={data} showRate={rate} />
+      <div className="row">
+        <div className="col-sm-6 col-md-4">
+          <ToggleButtonGroup
+            type="radio"
+            name="y-axis"
+            onChange={(e) => setRate(e)}
+            value={rate}
+            className="mb-2 float-md-left"
+          >
+            {AxesToggle}
+          </ToggleButtonGroup>
+        </div>
+        <div className="col-sm-6">
+          <Button
+            className="float-md-right"
+            variant={showCI ? 'outline-secondary' : 'secondary'}
+            onClick={(e) => {
+              setCI(!showCI);
+            }}
+          >
+            {showCI ? 'Hide Confidence Intervals' : 'Show Confidence Intervals'}
+          </Button>
+        </div>
+      </div>
+      <CompareModelsLine
+        showCI={showCI}
+        height={400}
+        errors={errors}
+        sqlData={data}
+        showRate={rate}
+      />
     </>
   );
 }

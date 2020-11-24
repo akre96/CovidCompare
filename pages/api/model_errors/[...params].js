@@ -19,7 +19,7 @@ export default async function (req, res) {
         AND variable = ${params[2]}
         AND model_short IN (
             'Delphi',
-            'IHME_MS_SEIR',
+            'IHME-MS-SEIR',
             'LANL',
             'Imperial',
             'SIKJalpha'

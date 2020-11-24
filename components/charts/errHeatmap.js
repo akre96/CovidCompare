@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const model_order = {
   Delphi: 0,
-  IHME_MS_SEIR: 1,
+  'IHME-MS-SEIR': 1,
   LANL: 2,
   Imperial: 3,
   SIKJalpha: 4,
@@ -23,7 +23,7 @@ function transformDataHeatmap(data, region) {
   return out;
 }
 function ErrHeatmap({ data, region }) {
-  const yLabels = ['Delphi', 'IHME_MS_SEIR', 'LANL', 'Imperial', 'SIKJalpha'];
+  const yLabels = ['Delphi', 'IHME-MS-SEIR', 'LANL', 'Imperial', 'SIKJalpha'];
   let xLabels = [];
   for (let i = 1; i <= 12; i++) {
     xLabels.push(i);

@@ -16,43 +16,10 @@ import {
 } from 'recharts';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-
-// calculate an n day rolling average
-function rollingAverage(data, n, names) {
-  return data.map((d, i) => {
-    let rd = { ...d };
-    if (i < n) {
-      names.map((m) => {
-        rd[m] = null;
-      });
-    } else {
-      names.map((m) => {
-        if (d[m] != null) {
-          let c = 0;
-          let avg = 0;
-          for (let j = i - n; j <= i; j++) {
-            if (data[j][m] != null) {
-              avg += data[j][m];
-              c += 1;
-            }
-          }
-          avg = avg / c;
-          rd[m] = avg;
-        }
-      });
-    }
-    return rd;
-  });
-}
-
-// available models and their colors
-const models = [
-  { name: 'Delphi', color: '#e84118', active: true },
-  { name: 'IHME_MS_SEIR', color: '#44bd32', active: true },
-  { name: 'Imperial', color: '#8c7ae6', active: true },
-  { name: 'LANL', color: '#0097e6', active: true },
-  { name: 'SIKJalpha', color: '#e1b12c', active: true },
-];
+import models from '../../assets/models';
+import rollingAverage from '../../lib/rollingAverage';
+import caseRate from '../../lib/caseRate';
+import createDateTicks from '../../lib/createDateTicks';
 
 /** 
  * Chart to compare models
@@ -63,13 +30,13 @@ const models = [
  * @param {bool} showRate - toggles showing deaths/day or cumulative deaths
  * @return {ReturnValueDataTypeHere} Brief description of the returning value here.
  */
-function CompareModelsLine({ height, sqlData, showRate, errors }) {
+function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
   // React Hook for which models to display
   const [activeModels, setModels] = useState(models);
 
   if (errors) return 'Error encountered';
   // today used to draw reference line
-  const today = dayjs().format('YYYY-MM-DD');
+  const today = dayjs().valueOf();
 
   // just names of models
   const model_names = models.map((m) => m.name);
@@ -91,7 +58,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
   if (dLength > 0) {
     data.map((d, i) => {
       const date = dayjs(d.date);
-      d.date = date.format('YYYY-MM-DD');
+      d.date = date.valueOf();
       var nextDay = date.add(1, 'day');
       // Log date gaps to fill
       if (i < dLength - 1) {
@@ -99,10 +66,12 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
           toAdd.push({
             index: i,
             startDate: nextDay,
+            // converts time diff to days
             fillSize: (dayjs(data[i + 1].date) - nextDay) / 86400000,
           });
         }
       }
+      // filter prediction data before today
       if (!dayjs().isBefore(d.date)) {
         names.map((m) => {
           d[m] = null;
@@ -116,7 +85,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
       const toFill = [];
       for (let j = 0; j < a.fillSize; j++) {
         toFill.push({
-          date: a.startDate.add(j, 'days').format('YYYY-MM-DD'),
+          date: a.startDate.add(j, 'days').valueOf(),
           truth: null,
         });
       }
@@ -127,28 +96,8 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
 
   // Rolling average run on daily case rate. Lower and upper bounds not used for rate
   const rate_data = rollingAverage(
-    // Calculate daily case rate
-    data.map((d, i) => {
-      let rd = { ...d };
-
-      // first data point set to null
-      if (i === 0) {
-        base_names.map((m) => {
-          rd[m] = null;
-        });
-      } else {
-        // if consecutive not-null points get case difference
-        base_names.map((m) => {
-          if ((d[m] != null) & (data[i - 1][m] != null)) {
-            rd[m] = d[m] - data[i - 1][m];
-          } else {
-            rd[m] = null;
-          }
-        });
-      }
-      return rd;
-    }),
-    7,
+    caseRate(data, base_names),
+    7, // seven days
     base_names,
   );
 
@@ -178,7 +127,9 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
         }}
       />
       <label className="form-check-label" htmlFor={m.name}>
-        <strong style={{ color: m.color }}>{m.name}</strong>
+        <a href={m.link} rel="noreferrer" target="_blank">
+          <strong style={{ color: m.color }}>{m.name}</strong>
+        </a>
       </label>
     </div>
   ));
@@ -217,34 +168,60 @@ function CompareModelsLine({ height, sqlData, showRate, errors }) {
       return [null, null];
     }
   }
+  function labelFormatter(l) {
+    const date = dayjs(l);
+    if (date.isBefore(today)) {
+      return date.format('MMM DD YYYY');
+    }
+    const nweeks = ((date - today) / 86400000 / 7).toFixed(1);
+    return `${nweeks} weeks ahead`;
+  }
+  function yTickFormatter(v) {
+    if (showRate) return v;
+    if (v === 0) return v;
+    return `${(v / 1000).toFixed(1)}k`;
+  }
+  const range = [data[0].date, data.splice(-1)[0].date]
   return (
     <>
-      <ResponsiveContainer height={height}>
-        <ComposedChart data={showRate ? rate_data : data}>
-          <CartesianGrid strokeDasharray="5 5" />
-          <XAxis dataKey="date" tickFormatter={(v) => dayjs(v).format('MMM DD')} />
-          {!showRate && model_errors}
-          {model_lines}
-          <Line
-            name="Recorded Cases"
-            type="monotone"
-            dataKey="truth"
-            stroke="black"
-            dot={false}
-            strokeWidth={2}
-          />
-          <YAxis type="number" />
-          <ReferenceLine x={today} stroke="black" strokeWidth={2} />
-          <Tooltip
-            formatter={tooltipFormatter}
-            labelFormatter={(l) => dayjs(l).format('MMM DD YYYY')}
-            labelStyle={{ fontWeight: 'bold' }}
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
-      <div className={'form-group'} style={{ textAlign: 'center' }}>
-        <h5>Models</h5>
-        {ModelCheckboxes}
+      <div className="row">
+        <div className="col-md-10">
+          <ResponsiveContainer height={height}>
+            <ComposedChart data={showRate ? rate_data : data}>
+              <CartesianGrid strokeDasharray="5 5" />
+              <XAxis
+                domain={range}
+                type="number"
+                dataKey="date"
+                ticks={createDateTicks(range)}
+                tickFormatter={(v) => dayjs(v).format('MMM DD')}
+              />
+              {!showRate && showCI && model_errors}
+              {model_lines}
+              <Line
+                name="Recorded Mortality"
+                type="monotone"
+                dataKey="truth"
+                stroke="black"
+                dot={false}
+                strokeWidth={2}
+              />
+              <YAxis type="number" tickFormatter={yTickFormatter} />
+              <ReferenceLine x={today} stroke="black" strokeWidth={2} />
+              <Tooltip
+                formatter={tooltipFormatter}
+                labelFormatter={labelFormatter}
+                labelStyle={{ fontWeight: 'bold' }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="col-md-2">
+          <div className={'form-group'} style={{ textAlign: 'left' }}>
+            <h5>Modeling Group</h5>
+            {ModelCheckboxes}
+          </div>
+        </div>
       </div>
     </>
   );
@@ -258,11 +235,12 @@ CompareModelsLine.propTypes = {
   }),
   errors: PropTypes.object,
   showRate: PropTypes.bool.isRequired,
+  showCI: PropTypes.bool.isRequired,
 };
 CompareModelsLine.defaultProps = {
   width: null,
   height: 500,
-  sqlData: { data: [] },
+  sqlData: { data: [{ date: dayjs.valueOf() }] },
 };
 
 export default CompareModelsLine;
