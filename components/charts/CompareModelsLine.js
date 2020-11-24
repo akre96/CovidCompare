@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import models from '../../assets/models';
 import rollingAverage from '../../lib/rollingAverage';
 import caseRate from '../../lib/caseRate';
+import createDateTicks from '../../lib/createDateTicks';
 
 /** 
  * Chart to compare models
@@ -180,6 +181,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
     if (v === 0) return v;
     return `${(v / 1000).toFixed(1)}k`;
   }
+  const range = [data[0].date, data.splice(-1)[0].date]
   return (
     <>
       <div className="row">
@@ -188,9 +190,10 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
             <ComposedChart data={showRate ? rate_data : data}>
               <CartesianGrid strokeDasharray="5 5" />
               <XAxis
-                domain={[data[0].date, data.splice(-1)[0].date]}
+                domain={range}
                 type="number"
                 dataKey="date"
+                ticks={createDateTicks(range)}
                 tickFormatter={(v) => dayjs(v).format('MMM DD')}
               />
               {!showRate && showCI && model_errors}

@@ -18,7 +18,13 @@ const Layout = ({ children }) => {
           }}
         >
           <div className="container">
+            <p>
           © {new Date().getFullYear()} Joseph Friedman, Patrick Liu, Samir Akre
+            </p>
+            <p>
+              Last Updated November 2020
+            </p>
+
           </div>
         </footer>
     </>
