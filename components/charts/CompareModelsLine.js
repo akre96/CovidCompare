@@ -11,6 +11,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
+  Scatter,
   Tooltip,
   ReferenceLine,
 } from 'recharts';
@@ -36,7 +37,8 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
 
   if (errors) return 'Error encountered';
   // today used to draw reference line
-  const today = dayjs().valueOf();
+  const todayObj = dayjs();
+  const today = todayObj.valueOf();
 
   // just names of models
   const model_names = models.map((m) => m.name);
@@ -52,51 +54,21 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
   const base_names = [...model_names, 'truth'];
 
   // Delete model predictions before today, fill null days
-  const data = [...sqlData.data];
-  const dLength = data.length;
-  const toAdd = [];
-  if (dLength > 0) {
-    data.map((d, i) => {
-      const date = dayjs(d.date);
-      d.date = date.valueOf();
-      var nextDay = date.add(1, 'day');
-      // Log date gaps to fill
-      if (i < dLength - 1) {
-        if (!dayjs(data[i + 1].date).isSame(nextDay, 'day')) {
-          toAdd.push({
-            index: i,
-            startDate: nextDay,
-            // converts time diff to days
-            fillSize: (dayjs(data[i + 1].date) - nextDay) / 86400000,
-          });
-        }
-      }
-      // filter prediction data before today
-      if (!dayjs().isBefore(d.date)) {
-        names.map((m) => {
-          d[m] = null;
-        });
-      }
-    });
 
-    // Fill date gaps
-    var add_index = 0;
-    toAdd.map((a) => {
-      const toFill = [];
-      for (let j = 0; j < a.fillSize; j++) {
-        toFill.push({
-          date: a.startDate.add(j, 'days').valueOf(),
-          truth: null,
-        });
-      }
-      data.splice(a.index + add_index + 1, 0, ...toFill);
-      add_index += a.fillSize;
-    });
-  }
+  sqlData.truth.map((d) => {
+    d.date = dayjs(d.date).valueOf();
+  });
+  sqlData.data.map((d) => {
+    d.date = dayjs(d.date).valueOf();
+  });
 
+  const data = sqlData.data.filter((d) => {
+    return todayObj.isBefore(d.date);
+  });
+  const allData = [...sqlData.truth, ...data];
   // Rolling average run on daily case rate. Lower and upper bounds not used for rate
   const rate_data = rollingAverage(
-    caseRate(data, base_names),
+    caseRate(allData, base_names),
     7, // seven days
     base_names,
   );
@@ -155,6 +127,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
         dataKey={`${m.name}_range`}
         stroke={m.color}
         fill={m.color}
+        data={data}
         fillOpacity={0.5}
       />
     );
@@ -174,20 +147,20 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
       return date.format('MMM DD YYYY');
     }
     const nweeks = ((date - today) / 86400000 / 7).toFixed(1);
-    return `${nweeks} weeks ahead`;
+    return `${date.format('MMM DD YYYY')} - ${nweeks} weeks ahead`;
   }
   function yTickFormatter(v) {
     if (showRate) return v;
     if (v === 0) return v;
     return `${(v / 1000).toFixed(1)}k`;
   }
-  const range = [data[0].date, data.splice(-1)[0].date]
+  const range = [allData[0].date, allData.splice(-1)[0].date];
   return (
     <>
       <div className="row">
         <div className="col-md-10">
           <ResponsiveContainer height={height}>
-            <ComposedChart data={showRate ? rate_data : data}>
+            <ComposedChart data={showRate ? rate_data : allData}>
               <CartesianGrid strokeDasharray="5 5" />
               <XAxis
                 domain={range}
@@ -196,8 +169,8 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
                 ticks={createDateTicks(range)}
                 tickFormatter={(v) => dayjs(v).format('MMM DD')}
               />
+              <YAxis type="number" tickFormatter={yTickFormatter} />
               {!showRate && showCI && model_errors}
-              {model_lines}
               <Line
                 name="Recorded Mortality"
                 type="monotone"
@@ -206,7 +179,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
                 dot={false}
                 strokeWidth={2}
               />
-              <YAxis type="number" tickFormatter={yTickFormatter} />
+              {model_lines}
               <ReferenceLine x={today} stroke="black" strokeWidth={2} />
               <Tooltip
                 formatter={tooltipFormatter}
@@ -240,7 +213,7 @@ CompareModelsLine.propTypes = {
 CompareModelsLine.defaultProps = {
   width: null,
   height: 500,
-  sqlData: { data: [{ date: dayjs.valueOf() }] },
+  sqlData: { data: [{ date: dayjs.valueOf() }], truth: [{ date: dayjs().valueOf() }] },
 };
 
 export default CompareModelsLine;

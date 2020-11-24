@@ -46,7 +46,7 @@ const ModelPredictionErrorPage = () => {
       </p>
       <div className="row pb-2">
         <div className="col-sm-6">
-          <h5>Region/Country</h5>
+          <h5>Country or US State</h5>
           <Select
             options={regionSelectList}
             defaultValue={{ value: 'United States', label: 'United States' }}

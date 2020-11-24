@@ -6,11 +6,18 @@ export default async function (req, res) {
   const {
     query: { region },
   } = req;
+  const truth = await runQuery(SQL`
+    SELECT
+        date,
+        truth 
+    FROM truth
+    WHERE ihme_loc_id = ${region}
+    ORDER BY date
+`);
   const data = await runQuery(SQL`
         SELECT
             currentforecast.ihme_loc_id,
             currentforecast.date,
-            truth.truth, 
             Delphi,
             IHME_MS_SEIR,
             Imperial,
@@ -27,11 +34,8 @@ export default async function (req, res) {
             LANL_l,
             SIKJalpha_l
         FROM currentforecast
-        LEFT OUTER JOIN truth 
-        ON (truth.date = currentforecast.date
-        AND truth.ihme_loc_id = currentforecast.ihme_loc_id)
         WHERE currentforecast.ihme_loc_id = ${region}
         ORDER BY date
     `);
-  res.status(200).json({ data });
+  res.status(200).json({ data, truth });
 }
