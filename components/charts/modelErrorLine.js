@@ -105,6 +105,7 @@ function ModelErrorLine({ sqlData, name }) {
           <ZAxis range={markerSize} />
           <Scatter data={modelData} fill={fill} fillOpacity={0.5} />
           <ReferenceLine x={today} stroke="black" strokeWidth={2} />
+          <ReferenceLine y={0} strokeOpacity={0.5} stroke="gray" strokeWidth={2} />
           <Tooltip content={CustomToolTip} />
         </ScatterChart>
       </ResponsiveContainer>
