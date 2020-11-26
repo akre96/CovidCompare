@@ -74,7 +74,7 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
           </p>
         )}
         <p>
-          {mapNameToTitle[payload[1].name]}: {payload[0].payload.cases}
+          {mapNameToTitle[payload[1].name]}: {(payload[0].payload.cases/1000).toFixed(1)}k
         </p>
       </div>
     );
@@ -89,8 +89,8 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
             Model Date: {dayjs(payload[0].payload.modelDate).format('MMM DD YYYY')}
           </p>
         )}
-        <p>{`${payload[0].payload.error} deaths`}</p>
-        <p>{`(Prediction: ${payload[0].payload.cases}, Recorded: ${payload[0].payload.truth})`}</p>
+        <p>{`Error: ${(payload[0].payload.error/1000).toFixed(1)}k deaths`}</p>
+        <p>{`(Prediction: ${(payload[0].payload.cases/1000).toFixed(1)}k, Recorded: ${(payload[0].payload.truth/1000).toFixed(1)}k)`}</p>
       </div>
     );
   }
