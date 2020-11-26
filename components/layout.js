@@ -32,8 +32,7 @@ const Layout = ({ children }) => {
               <FaGithub fontSize={'1.5rem'} style={{marginRight: '5px', marginTop: '-5px'}}/>
               Analysis Code 
             </a>
-          </p>
-          <p style={{ textAlign: 'center' }}>
+            {' | '}
             <a
               style={{ color: 'gray' }}
               href="https://github.com/akre96/CovidCompare"
