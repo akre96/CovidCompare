@@ -13,18 +13,19 @@ import loc_id_map from '../assets/loc_id_map.json';
 import models from '../assets/models';
 
 const ModelPredictionErrorPage = () => {
-  // fixes IHME data name in models
-  const renameModels = models.map((m) => ({
-    ...m,
-    name: m.name.replace(/_/g, '-'),
-  }));
   const defaultRange = [dayjs('2020-03-25').valueOf(), dayjs().valueOf()];
   const defaultMonths = createDateTicks(defaultRange).map((d) => ({ value: d, active: true }));
 
   // React Hooks for current region/country
   const [selectedCountry, setRegion] = useState('United States');
-  const [modelName, setModel] = useState(renameModels[0].name);
+  const [modelName, setModel] = useState(models[0].name);
   const [months, setModelMonths] = useState(defaultMonths);
+
+  // create query for dates
+  const { data, error } = useSWR(
+    '/api/predictions/' + loc_id_map[selectedCountry] + '/' + modelName ,
+    fetcher,
+  );
 
   // List of possible regions
   const regionSelectList = Object.keys(loc_id_map).map((loc) => ({
@@ -32,21 +33,11 @@ const ModelPredictionErrorPage = () => {
     label: loc,
   }));
   // List of models
-  const modelList = renameModels.map((m) => ({
+  const modelList = models.map((m) => ({
     value: m.name,
     label: m.name,
   }));
 
-  // create query for dates
-  const activeMonths = months.filter((m) => m.active);
-  const dateString = months
-    .filter((m) => m.active)
-    .map((m) => m.value)
-    .join('/');
-  const { data, error } = useSWR(
-    '/api/predictions/' + loc_id_map[selectedCountry] + '/' + modelName + '/' + dateString,
-    fetcher,
-  );
   if (error) {
     return 'SQL Error Encountered. Try refresing your browser.';
   }
@@ -64,6 +55,8 @@ const ModelPredictionErrorPage = () => {
       {dayjs(m.value).format('MMM YYYY')}
     </Button>
   ));
+
+  const activeMonths = months.filter((m) => m.active);
 
   return (
     <>
