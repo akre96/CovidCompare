@@ -47,7 +47,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
   const today = todayObj.valueOf();
 
   // just names of models
-  const model_names = currentModels.map((m) => m);
+  const model_names = currentModels.map((m) => m.name);
 
   // models and ground truth
   const base_names = [...model_names, 'truth'];
@@ -59,25 +59,23 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
   });
   sqlData.data.map((d) => {
     d.date = dayjs(d.date).valueOf();
+    // Format prediction bounds for ReCharts
+    model_names.map((m) => {
+      d[`${m}_range`] = [d[`${m}_l`], d[`${m}_u`]];
+    });
   });
 
   const data = sqlData.data.filter((d) => {
     return todayObj.isBefore(d.date);
   });
   const allData = [...sqlData.truth, ...data];
+
   // Rolling average run on daily case rate. Lower and upper bounds not used for rate
   const rate_data = rollingAverage(
     caseRate(allData, base_names),
     7, // seven days
     base_names,
   );
-
-  // Format prediction bounds for ReCharts
-  data.map((d) => {
-    model_names.map((m) => {
-      d[`${m}_range`] = [d[`${m}_l`], d[`${m}_u`]];
-    });
-  });
 
   // Checkboxes to plot/hide model predictions
   const ModelCheckboxes = activeModels.map((m, i) => (
