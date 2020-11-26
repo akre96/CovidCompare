@@ -134,6 +134,8 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
   // Hides tooltip for lower/upper bounds
   function tooltipFormatter(v, _n, _p) {
     try {
+      // just checks that number and not range
+      v.toFixed(2);
       return `${(v/1000).toFixed(1)}k`;
     } catch {
       return [null, null];

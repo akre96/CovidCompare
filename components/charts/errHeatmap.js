@@ -36,8 +36,6 @@ function ErrHeatmap({ data, region }) {
   const filteredLabels = yLabels.filter(
     (_d, i) => !(transformedData[i].join(',').replace(/,/g, '').length === 0),
   );
-  console.log(yLabels)
-  console.log(filteredLabels)
   return (
     <div className="px-4 hmap">
       <strong>Forecast week</strong>

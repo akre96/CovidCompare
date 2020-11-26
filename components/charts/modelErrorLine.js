@@ -32,8 +32,6 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
     date: dayjs(t.date).valueOf(),
     cases: t.truth,
   }));
-  console.log(activeMonths)
-  console.log(activeMonths.map((m) => dayjs(m).format('MMM DD YYYY')))
   const modelData = sqlData.data
     .filter((d) =>
       activeMonths.some(
