@@ -39,7 +39,10 @@ footer  {
 .popover{
   max-width: 90%;
 }
-
+.histMonth:hover {
+  background-color: white;
+  color: gray;
+}
 @media only screen and (max-width: 767px) {
   .hmap {
     max-width: 100%;

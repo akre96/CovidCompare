@@ -44,6 +44,7 @@ const ModelPredictionErrorPage = () => {
   const ModelMonthButtons = months.map((m, i) => (
     <Button
       key={i}
+      className={"histMonth"}
       value={i}
       onClick={(e) => {
         var temp = [...months];
