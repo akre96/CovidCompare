@@ -23,4 +23,4 @@ module.exports = {
 
 - Ask author for help to connect to our database
 
-3. Run command `yarn Dev`
+3. Run command `yarn dev`

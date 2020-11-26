@@ -116,7 +116,7 @@ const ModelErrorPage = () => {
                 </Popover>
               }
             >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-2vw', marginLeft: '5px' }} />
+              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
             </OverlayTrigger>
           </h5>
           <Select
@@ -161,7 +161,7 @@ const ModelErrorPage = () => {
                 </Popover>
               }
             >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-2vw', marginLeft: '5px' }} />
+              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
             </OverlayTrigger>
           </h5>
           <Select
@@ -187,7 +187,7 @@ const ModelErrorPage = () => {
                 </Popover>
               }
             >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-2vw', marginLeft: '5px' }} />
+              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
             </OverlayTrigger>
           </h5>
           <MonthSelect
@@ -214,7 +214,7 @@ const ModelErrorPage = () => {
                 </Popover>
               }
             >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-2vw', marginLeft: '5px' }} />
+              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
             </OverlayTrigger>
           </h5>
           <Select
