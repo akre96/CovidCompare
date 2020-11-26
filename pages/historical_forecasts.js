@@ -89,7 +89,7 @@ const ModelPredictionErrorPage = () => {
         'Loading...'
       )}
       <div className="row justify-content-center">
-        <div className="col-lg-10">
+        <div className="col-lg-10" style={{overflowX: 'scroll'}}>
           <strong>Showing Models Created In:</strong>
           <ButtonGroup>{ModelMonthButtons}</ButtonGroup>
         </div>
