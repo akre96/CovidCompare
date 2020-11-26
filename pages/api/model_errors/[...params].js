@@ -17,13 +17,6 @@ export default async function (req, res) {
         model_month = ${params[0]}
         AND err_type = ${params[1]}
         AND variable = ${params[2]}
-        AND model_short IN (
-            'Delphi',
-            'IHME-MS-SEIR',
-            'LANL',
-            'Imperial',
-            'SIKJalpha'
-        )
         AND approach = 'monthly'
     `);
   res.status(200).json({ data });

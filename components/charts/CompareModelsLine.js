@@ -3,6 +3,7 @@
  * @author Samir Akre <sakre@g.ucla.edu>
  */
 import React, { useState } from 'react';
+import { BsBoxArrowRight } from 'react-icons/bs';
 import {
   ResponsiveContainer,
   Area,
@@ -11,7 +12,6 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Scatter,
   Tooltip,
   ReferenceLine,
 } from 'recharts';
@@ -21,6 +21,12 @@ import models from '../../assets/models';
 import rollingAverage from '../../lib/rollingAverage';
 import caseRate from '../../lib/caseRate';
 import createDateTicks from '../../lib/createDateTicks';
+
+// Get updated models only
+const currentModels = models
+  .filter((m) => m.current)
+  // corrects for sql error caused by dashes in model names
+  .map((m) => ({ ...m, active: true, name: m.name.replace(/-/g, '_') }));
 
 /** 
  * Chart to compare models
@@ -33,7 +39,7 @@ import createDateTicks from '../../lib/createDateTicks';
  */
 function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
   // React Hook for which models to display
-  const [activeModels, setModels] = useState(models);
+  const [activeModels, setModels] = useState(currentModels);
 
   if (errors) return 'Error encountered';
   // today used to draw reference line
@@ -41,14 +47,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
   const today = todayObj.valueOf();
 
   // just names of models
-  const model_names = models.map((m) => m.name);
-
-  // lower and upper bound columns from sql query
-  const lower_names = models.map((m) => `${m.name}_l`);
-  const upper_names = models.map((m) => `${m.name}_u`);
-
-  // all columns of model data from sql query data
-  const names = [...model_names, ...upper_names, ...lower_names];
+  const model_names = currentModels.map((m) => m);
 
   // models and ground truth
   const base_names = [...model_names, 'truth'];
@@ -99,8 +98,9 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
         }}
       />
       <label className="form-check-label" htmlFor={m.name}>
+        <strong style={{ color: m.color }}>{m.name.replace(/_/g, '-')}</strong>
         <a href={m.link} rel="noreferrer" target="_blank">
-          <strong style={{ color: m.color }}>{m.name}</strong>
+          <BsBoxArrowRight style={{ marginLeft: '5px' }} />
         </a>
       </label>
     </div>
@@ -205,6 +205,7 @@ CompareModelsLine.propTypes = {
   height: PropTypes.number,
   sqlData: PropTypes.shape({
     data: PropTypes.array,
+    truth: PropTypes.array,
   }),
   errors: PropTypes.object,
   showRate: PropTypes.bool.isRequired,

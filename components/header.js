@@ -8,7 +8,7 @@ import Nav from 'react-bootstrap/Nav';
 
 const Header = ({ siteTitle }) => (
   <Navbar variant="dark" bg="dark" expand="lg">
-    <Container>
+    <div className="container-lg">
       <Navbar.Brand style={{ fontSize: '2em' }}>
         <Link href="/">{siteTitle}</Link>
       </Navbar.Brand>
@@ -29,7 +29,7 @@ const Header = ({ siteTitle }) => (
           </Link>
         </Nav>
       </Navbar.Collapse>
-    </Container>
+    </div>
   </Navbar>
 );
 

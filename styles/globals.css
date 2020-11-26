@@ -28,6 +28,10 @@
 .scatterToolTip .date {
   font-weight: bold;
 }
+.scatterToolTip p {
+  padding: 0;
+  margin: 0;
+}
 footer  {
   border-top: 1px solid #212529;
   padding-top: 2em;

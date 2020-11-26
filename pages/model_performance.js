@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import useSWR from 'swr';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import PropTypes from 'prop-types';
+dayjs.extend(customParseFormat);
 
 import fetcher from '../lib/fetcher';
 import ErrHeatmap from '../components/charts/errHeatmap';
@@ -30,7 +33,14 @@ function MonthSelect({ data, errors, onChange, value }) {
   if (!data) {
     return <Select options={[]} defaultValue={value} placeholder="Loading..." isLoading={true} />;
   }
-  const selectList = data.data.map((m) => ({ value: m.model_month, label: m.model_month }));
+  data.data.sort(
+    (a, b) =>
+      dayjs(a.model_month.replace(',', ''), 'MMM YYYY') -
+      dayjs(b.model_month.replace(',', ''), 'MMM YYYY'),
+  );
+  const selectList = data.data
+    .filter((m) => m.model_month !== 'N/A')
+    .map((m) => ({ value: m.model_month, label: m.model_month }));
   return <Select options={selectList} defaultValue={value} onChange={onChange} />;
 }
 MonthSelect.propTypes = {
@@ -51,7 +61,7 @@ MonthSelect.propTypes = {
 
 const ModelErrorPage = () => {
   // React hook paramaters for data selection
-  const [modelMonth, setMonth] = useState('Oct');
+  const [modelMonth, setMonth] = useState('Oct, 2020');
   const [errType, setErrType] = useState(errTypes[0]);
   const [variableType, setVariableType] = useState(variableTypes[0]);
   const [superRegion, setSuperRegion] = useState(superRegions[0]);

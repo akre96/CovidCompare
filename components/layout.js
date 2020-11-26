@@ -8,25 +8,19 @@ const Layout = ({ children }) => {
     <>
       <Header siteTitle={`covidcompare`} />
       <br></br>
-      <div className="container">
+      <div className="container-lg">
         <main>{children}</main>
       </div>
-        <footer
-          className="row"
-          style={{
-            marginTop: `2rem`,
-          }}
-        >
-          <div className="container">
-            <p>
-          © {new Date().getFullYear()} Joseph Friedman, Patrick Liu, Samir Akre
-            </p>
-            <p>
-              Last Updated November 2020
-            </p>
-
-          </div>
-        </footer>
+      <footer
+        className="row"
+        style={{
+          marginTop: `2rem`,
+        }}
+      >
+        <div className="container-lg">
+          <p>© {new Date().getFullYear()} Joseph Friedman, Patrick Liu, Samir Akre</p>
+        </div>
+      </footer>
     </>
   );
 };
