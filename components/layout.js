@@ -1,12 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FaGithub } from 'react-icons/fa';
+import Head from 'next/head';
 
 import Header from './header';
 
 const Layout = ({ children }) => {
   return (
     <>
+      <Head>
+        <script
+          async
+          defer
+          data-domain="covid-compare.vercel.app"
+          src="https://plausible.io/js/plausible.js"
+        ></script>
+      </Head>
       <Header siteTitle={`covidcompare`} />
       <br></br>
       <div className="container-lg">
@@ -29,8 +38,8 @@ const Layout = ({ children }) => {
               target="_blank"
               rel="noreferrer"
             >
-              <FaGithub fontSize={'1.5rem'} style={{marginRight: '5px', marginTop: '-5px'}}/>
-              Analysis Code 
+              <FaGithub fontSize={'1.5rem'} style={{ marginRight: '5px', marginTop: '-5px' }} />
+              Analysis Code
             </a>
             {' | '}
             <a
@@ -39,8 +48,8 @@ const Layout = ({ children }) => {
               target="_blank"
               rel="noreferrer"
             >
-              <FaGithub fontSize={'1.5rem'} style={{marginRight: '5px', marginTop: '-5px'}}/>
-              Website Code 
+              <FaGithub fontSize={'1.5rem'} style={{ marginRight: '5px', marginTop: '-5px' }} />
+              Website Code
             </a>
           </p>
         </div>
