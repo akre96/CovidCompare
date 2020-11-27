@@ -19,6 +19,8 @@ import dayjs from 'dayjs';
 import models from '../../assets/models';
 import createDateTicks from '../../lib/createDateTicks';
 
+const defaultData = { data: [{ date: dayjs().valueOf() }], truth: [{ date: dayjs().valueOf() }] }
+
 function ModelErrorLine({ sqlData, name, activeMonths }) {
   const markerSize = [20, 20];
   const today = dayjs().valueOf();
@@ -92,6 +94,9 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
       </div>
     );
   }
+  if (modelData.length < 1) {
+    modelData.push(defaultData.data[0])
+  }
   const range = [truthData[0].date, modelData.slice(-1)[0].date];
   return (
     <>
@@ -146,7 +151,7 @@ ModelErrorLine.propTypes = {
   name: PropTypes.string.isRequired,
 };
 ModelErrorLine.defaultProps = {
-  sqlData: { data: [{ date: dayjs().valueOf() }], truth: [{ date: dayjs().valueOf() }] },
+  sqlData: defaultData,
   activeMonths: createDateTicks([dayjs('2020-03-25').valueOf(), dayjs().valueOf()]),
 };
 
