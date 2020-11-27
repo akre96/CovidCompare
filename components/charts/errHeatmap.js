@@ -22,7 +22,6 @@ function transformDataHeatmap(data, region) {
   return out;
 }
 function ErrHeatmap({ data, region }) {
-  const yLabels = models.map((m) => m.name);
   let xLabels = [];
   for (let i = 1; i <= 12; i++) {
     xLabels.push(i);
@@ -33,9 +32,17 @@ function ErrHeatmap({ data, region }) {
 
   // Filter out if model has no prediction data
   const filteredData = transformedData.filter((d) => !(d.join(',').replace(/,/g, '').length === 0));
-  const filteredLabels = yLabels.filter(
+  const filteredModels = models.filter(
     (_d, i) => !(transformedData[i].join(',').replace(/,/g, '').length === 0),
   );
+  const filteredLabels = filteredModels.map((m) => m.name.replace(/-/g, '_'))
+  const yLabelsStyle = (i) => (
+    {
+      color: models[i].color,
+      fontWeight: 'bold',
+      whitespace: 'nowrap'
+    }
+  )
   return (
     <div className="px-4 hmap">
       <strong>Forecast week</strong>
@@ -51,6 +58,7 @@ function ErrHeatmap({ data, region }) {
         square
         xLabels={xLabels}
         yLabels={filteredLabels}
+        yLabelsStyle={yLabelsStyle}
       />
     </div>
   );
