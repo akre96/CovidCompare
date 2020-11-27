@@ -35,14 +35,12 @@ function ErrHeatmap({ data, region }) {
   const filteredModels = models.filter(
     (_d, i) => !(transformedData[i].join(',').replace(/,/g, '').length === 0),
   );
-  const filteredLabels = filteredModels.map((m) => m.name.replace(/-/g, '_'))
-  const yLabelsStyle = (i) => (
-    {
-      color: models[i].color,
-      fontWeight: 'bold',
-      whitespace: 'nowrap'
-    }
-  )
+  const filteredLabels = filteredModels.map((m) => m.name.replace(/-/g, '_'));
+  const yLabelsStyle = (i) => ({
+    color: filteredModels[i].color,
+    fontWeight: 'bold',
+    whitespace: 'nowrap',
+  });
   return (
     <div className="px-4 hmap">
       <strong>Forecast week</strong>

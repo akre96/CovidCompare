@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 import models from '../../assets/models';
 import createDateTicks from '../../lib/createDateTicks';
 
-const defaultData = { data: [{ date: dayjs().valueOf() }], truth: [{ date: dayjs().valueOf() }] }
+const defaultData = { data: [{ date: dayjs().valueOf() }], truth: [{ date: dayjs().valueOf() }] };
 
 function ModelErrorLine({ sqlData, name, activeMonths }) {
   const markerSize = [20, 20];
@@ -74,7 +74,7 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
           </p>
         )}
         <p>
-          {mapNameToTitle[payload[1].name]}: {(payload[0].payload.cases/1000).toFixed(1)}k
+          {mapNameToTitle[payload[1].name]}: {(payload[0].payload.cases / 1000).toFixed(1)}k
         </p>
       </div>
     );
@@ -89,13 +89,15 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
             Model Date: {dayjs(payload[0].payload.modelDate).format('MMM DD YYYY')}
           </p>
         )}
-        <p>{`Error: ${(payload[0].payload.error/1000).toFixed(1)}k deaths`}</p>
-        <p>{`(Prediction: ${(payload[0].payload.cases/1000).toFixed(1)}k, Recorded: ${(payload[0].payload.truth/1000).toFixed(1)}k)`}</p>
+        <p>{`Error: ${(payload[0].payload.error / 1000).toFixed(1)}k deaths`}</p>
+        <p>{`(Prediction: ${(payload[0].payload.cases / 1000).toFixed(1)}k, Recorded: ${(
+          payload[0].payload.truth / 1000
+        ).toFixed(1)}k)`}</p>
       </div>
     );
   }
   if (modelData.length < 1) {
-    modelData.push(defaultData.data[0])
+    modelData.push(defaultData.data[0]);
   }
   const range = [truthData[0].date, modelData.slice(-1)[0].date];
   return (
