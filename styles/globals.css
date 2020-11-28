@@ -1,3 +1,6 @@
+body {
+  overflow-y: hidden;
+}
 .nav-link {
   color: white;
 }
