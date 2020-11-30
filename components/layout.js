@@ -12,11 +12,11 @@ const Layout = ({ children }) => {
         <script
           async
           defer
-          data-domain="covid-compare.vercel.app"
+          data-domain="covidcompare.io"
           src="https://plausible.io/js/plausible.js"
         ></script>
       </Head>
-      <Header siteTitle={`covidcompare`} />
+      <Header siteTitle={`covidcompare.io`} />
       <br></br>
       <div className="container-lg">
         <main>{children}</main>
