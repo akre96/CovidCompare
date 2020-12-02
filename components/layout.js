@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
           property="og:description"
           content="Compare predicted trajectories in COVID-19 mortality from major, global models"
         />
-        <meta property="og:image" content="https://covidcompare.io/logo_text.png" />
+        <meta property="og:image" content="https://covidcompare.io/logo.png" />
         <script
           async
           defer
