@@ -10,6 +10,7 @@ import {
   ComposedChart,
   Line,
   XAxis,
+  Text,
   YAxis,
   CartesianGrid,
   Tooltip,
@@ -112,7 +113,17 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
     return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} dot={false} />;
   });
 
-
+  const AxisLabel = ({ axisType, x, y, width, height, stroke, children }) => {
+    const isVert = axisType === 'yAxis';
+    const cx = isVert ? x : x + width / 2;
+    const cy = isVert ? height / 2 + y : y + height + 10;
+    const rot = isVert ? `270 ${cx} ${cy}` : 0;
+    return (
+      <text x={cx} y={cy} transform={`rotate(${rot})`} textAnchor="middle" stroke={stroke}>
+        {children}
+      </text>
+    );
+  };
   // Hides tooltip for lower/upper bounds
   function tooltipFormatter(v, n, p) {
     try {
@@ -153,7 +164,15 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
       <div className="row">
         <div className="col-md-10">
           <ResponsiveContainer height={height}>
-            <ComposedChart data={showRate ? rate_data : allData}>
+            <ComposedChart
+              data={showRate ? rate_data : allData}
+              margin={{
+                top: 20,
+                right: 80,
+                bottom: 20,
+                left: 20,
+              }}
+            >
               <CartesianGrid strokeDasharray="5 5" />
               <XAxis
                 allowDataOverflow
@@ -163,7 +182,15 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
                 ticks={createDateTicks(range)}
                 tickFormatter={(v) => dayjs(v).format('MMM DD')}
               />
-              <YAxis type="number" tickFormatter={yTickFormatter} />
+              <YAxis
+                type="number"
+                label={
+                  <Text x={0} y={0} dx={15} dy={250} offset={0} angle={-90}>
+                    {showRate ? 'Deaths Per Day' : 'Cumulative Deaths'}
+                  </Text>
+                }
+                tickFormatter={yTickFormatter}
+              />
               <Line
                 name="Recorded Deaths"
                 type="monotone"
