@@ -9,9 +9,9 @@ import Nav from 'react-bootstrap/Nav';
 const Header = ({ siteTitle }) => (
   <Navbar variant="light" bg="light" expand="lg">
     <div className="container-lg">
-      <Navbar.Brand className={'brand-text'} style={{ fontSize: '1.5em' }}>
+      <Navbar.Brand className={'brand-text'} style={{ fontSize: '1.25em' }}>
         <Link href="/">
-          <Image height={100} width={100} src="/logo.png" />
+          <Image height={50} width={50} src="/logo.png" />
         </Link>
         <span>covidcompare.io</span>
       </Navbar.Brand>

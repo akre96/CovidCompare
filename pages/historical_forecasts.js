@@ -100,21 +100,21 @@ const ModelPredictionErrorPage = () => {
           <ButtonGroup>{ModelMonthButtons}</ButtonGroup>
         </div>
       </div>
-      <div className="row">
+      <div className="row pt-2">
         <div className="col">
-            <Button
-              onClick={(e) => setModelMonths(months.map((m) => ({ ...m, active: false })))}
-              variant={'dark'}
-              className="mr-2"
-            >
-              All Off
-            </Button>
-            <Button
-              onClick={(e) => setModelMonths(months.map((m) => ({ ...m, active: true})))}
-              variant={'info'}
-            >
-              All On
-            </Button>
+          <Button
+            onClick={(e) => setModelMonths(months.map((m) => ({ ...m, active: false })))}
+            variant={'dark'}
+            className="mr-2"
+          >
+            All Off
+          </Button>
+          <Button
+            onClick={(e) => setModelMonths(months.map((m) => ({ ...m, active: true })))}
+            variant={'info'}
+          >
+            All On
+          </Button>
         </div>
       </div>
     </>

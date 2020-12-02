@@ -112,31 +112,19 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
     return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} dot={false} />;
   });
 
-  // lower/upper bounds of models
-  const model_errors = activeModels.map((m) => {
-    if (!m.active) {
-      return;
-    }
-    return (
-      <Area
-        key={`${m.name}_range`}
-        legendType={'none'}
-        type="monotone"
-        dataKey={`${m.name}_range`}
-        stroke={m.color}
-        fill={m.color}
-        data={data}
-        fillOpacity={0.5}
-      />
-    );
-  });
 
   // Hides tooltip for lower/upper bounds
-  function tooltipFormatter(v, _n, _p) {
+  function tooltipFormatter(v, n, p) {
     try {
-      // just checks that number and not range
       v.toFixed(2);
-      return `${(v / 1000).toFixed(1)}k`;
+      if (n === 'Recorded Deaths') return `${(v / 1000).toFixed(2)}k`;
+      if (p.payload[p.name + '_range'][0] !== null && !showRate) {
+        return `${(v / 1000).toFixed(2)}k (95% CI ${(
+          p.payload[p.name + '_range'][0] / 1000
+        ).toFixed(2)}k - ${(p.payload[p.name + '_range'][1] / 1000).toFixed(2)}k)`;
+      }
+      // just checks that number and not range
+      return `${(v / 1000).toFixed(2)}k`;
     } catch {
       return [null, null];
     }
@@ -151,7 +139,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
   }
   function yTickFormatter(v) {
     if (v === 0) return v;
-    if (v > 100000){
+    if (v > 100000) {
       return `${(v / 1000).toFixed(1)}k`;
     }
     return `${(v / 1000).toFixed(2)}k`;
@@ -176,7 +164,6 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
                 tickFormatter={(v) => dayjs(v).format('MMM DD')}
               />
               <YAxis type="number" tickFormatter={yTickFormatter} />
-              {!showRate && showCI && model_errors}
               <Line
                 name="Recorded Deaths"
                 type="monotone"
