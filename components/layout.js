@@ -9,6 +9,22 @@ const Layout = ({ children }) => {
   return (
     <>
       <Head>
+        <title>covidcompare.io</title>
+        <meta
+          property="description"
+          content="Compare what international COVID-19 forecasts are predicting"
+        />
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="UTF-8" />
+        <meta property="og:url" content="https://covidcompare.io" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="covidcompare.io" />
+        <meta
+          property="og:description"
+          content="Compare what international COVID-19 forecasts are predicting"
+        />
+        <meta property="og:image" content="/logo_text.png" />
         <script
           async
           defer

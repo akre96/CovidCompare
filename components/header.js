@@ -3,14 +3,17 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
-import Container from 'react-bootstrap/Container';
+import Image from 'next/image';
 import Nav from 'react-bootstrap/Nav';
 
 const Header = ({ siteTitle }) => (
-  <Navbar variant="dark" bg="dark" expand="lg">
+  <Navbar variant="light" bg="light" expand="lg">
     <div className="container-lg">
-      <Navbar.Brand style={{ fontSize: '2em' }}>
-        <Link href="/">{siteTitle}</Link>
+      <Navbar.Brand className={'brand-text'} style={{ fontSize: '2em' }}>
+        <Link href="/">
+          <Image height={100} width={100} src="/logo.png" />
+        </Link>
+        <span>covidcompare.io</span>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

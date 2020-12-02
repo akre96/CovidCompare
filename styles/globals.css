@@ -1,6 +1,14 @@
 body {
   overflow-y: hidden;
 }
+.brand-text {
+  display: flex;
+  flex-basis: auto;
+  align-items: center;
+}
+.brand-text > span {
+  margin-left: 5px;
+}
 .nav-link {
   color: white;
 }
