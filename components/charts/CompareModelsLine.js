@@ -151,6 +151,9 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
   function yTickFormatter(v) {
     if (v === 0) return v;
     if (v > 100000) {
+      return `${(v / 1000).toFixed(0)}k`;
+    }
+    if (v > 10000) {
       return `${(v / 1000).toFixed(1)}k`;
     }
     return `${(v / 1000).toFixed(2)}k`;
@@ -166,12 +169,6 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
           <ResponsiveContainer height={height}>
             <ComposedChart
               data={showRate ? rate_data : allData}
-              margin={{
-                top: 20,
-                right: 80,
-                bottom: 20,
-                left: 20,
-              }}
             >
               <CartesianGrid strokeDasharray="5 5" />
               <XAxis
