@@ -37,7 +37,7 @@ const currentModels = models
  * @param {bool} showRate - toggles showing deaths/day or cumulative deaths
  * @return {ReturnValueDataTypeHere} Brief description of the returning value here.
  */
-function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
+function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) {
   // React Hook for which models to display
   const [activeModels, setModels] = useState(currentModels);
 
@@ -109,7 +109,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
     if (!m.active) {
       return;
     }
-    return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} />;
+    return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} dot={false} />;
   });
 
   // lower/upper bounds of models
@@ -136,7 +136,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
     try {
       // just checks that number and not range
       v.toFixed(2);
-      return `${(v/1000).toFixed(1)}k`;
+      return `${(v / 1000).toFixed(1)}k`;
     } catch {
       return [null, null];
     }
@@ -150,11 +150,16 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
     return `${date.format('MMM DD YYYY')} - ${nweeks} weeks ahead`;
   }
   function yTickFormatter(v) {
-    if (showRate) return v;
     if (v === 0) return v;
-    return `${(v / 1000).toFixed(1)}k`;
+    if (v > 100000){
+      return `${(v / 1000).toFixed(1)}k`;
+    }
+    return `${(v / 1000).toFixed(2)}k`;
   }
-  const range = [allData[0].date, allData.splice(-1)[0].date];
+  let range = [allData[0].date, allData.splice(-1)[0].date];
+  if (zoom) {
+    range = [dayjs().subtract(3, 'month').valueOf(), range[1]];
+  }
   return (
     <>
       <div className="row">
@@ -163,6 +168,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
             <ComposedChart data={showRate ? rate_data : allData}>
               <CartesianGrid strokeDasharray="5 5" />
               <XAxis
+                allowDataOverflow
                 domain={range}
                 type="number"
                 dataKey="date"
@@ -172,7 +178,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI }) {
               <YAxis type="number" tickFormatter={yTickFormatter} />
               {!showRate && showCI && model_errors}
               <Line
-                name="Recorded Mortality"
+                name="Recorded Deaths"
                 type="monotone"
                 dataKey="truth"
                 stroke="black"

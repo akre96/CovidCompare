@@ -27,7 +27,6 @@ const superRegions = [
   'Southeast, East Asia, Oceania',
   'Sub-Saharan Africa',
   'Latin America and Caribbean',
-  'South Asia',
 ];
 
 // Selector for month
@@ -141,20 +140,20 @@ const ModelErrorPage = () => {
                     use medians rather than means as a metric more robust to outliers.
                     <ul>
                       <li>
-                        Median absolute percent error answers the question “what percent wrong was
-                        each model, on average?”.
+                        <strong>Median absolute percent error</strong> answers the question “what
+                        percent wrong was each model, on average?”.
                       </li>
                       <li>
-                        Median percent error answers the question “was each model biased up or down,
-                        systematically?”. A positive median percent error indicates a model tends to
-                        overestimate mortality (be overly pessimistic).
+                        <strong>Median percent error</strong> answers the question “was each model
+                        biased up or down, systematically?”. A positive median percent error
+                        indicates a model tends to overestimate mortality (be overly pessimistic).
                       </li>
                       <li>
-                        Median absolute error and median error are similar to the above two metrics,
-                        however, they use full values, not relative to the size of the epidemic in
-                        each country. This tends to place a greater weight on the small number of
-                        countries with large epidemics, which is why we recommend focusing on the
-                        first two (relative) statistics for most questions.
+                        <strong>Median absolute error and median error</strong> are similar to the
+                        above two metrics, however, they use full values, not relative to the size
+                        of the epidemic in each country. This tends to place a greater weight on the
+                        small number of countries with large epidemics, which is why we recommend
+                        focusing on the first two (relative) statistics for most questions.
                       </li>
                     </ul>
                   </Popover.Content>
@@ -207,9 +206,14 @@ const ModelErrorPage = () => {
                 <Popover>
                   <Popover.Title as="h3">Interpretting Error Type</Popover.Title>
                   <Popover.Content>
-                    Total cumulative errors are calculated relative to the total amount of
-                    cumulative mortality at any given time. Weekly errors are calculated only on the
-                    new mortality occurring each week.
+                    <ul>
+                      <li>
+                    <strong>Total cumulative errors</strong> are calculated relative to the total amount of cumulative mortality at any given time. 
+                      </li>
+                      <li>
+                      <strong>Weekly errors</strong> are calculated only on the new mortality occurring each week.
+                      </li>
+                    </ul>
                   </Popover.Content>
                 </Popover>
               }

@@ -6,31 +6,31 @@ const models = [
   {
     name: 'Delphi',
     color: '#e84118',
-    link: 'https://github.com/COVIDAnalytics/website/tree/master/',
+    link: 'https://www.covidanalytics.io',
     current: true,
   },
   {
     name: 'IHME-MS-SEIR',
     color: '#44bd32',
-    link: 'http://www.healthdata.org/covid/data-downloads',
+    link: 'https://covid19.healthdata.org/global',
     current: true,
   },
   {
     name: 'IHME-CF-SEIR',
     color: '#006266',
-    link: 'http://www.healthdata.org/covid/data-downloads',
+    link: 'https://covid19.healthdata.org/global',
     current: false,
   },
   {
     name: 'IHME-CF',
     color: '#2ecc71',
-    link: 'http://www.healthdata.org/covid/data-downloads',
+    link: 'https://covid19.healthdata.org/global',
     current: false,
   },
   {
     name: 'Imperial',
     color: '#8c7ae6',
-    link: 'https://github.com/mrc-ide/global-lmic-reports/tree/master/',
+    link: 'https://mrc-ide.github.io/global-lmic-reports/',
     current: true,
   },
   {
@@ -47,8 +47,8 @@ const models = [
   },
   {
     name: 'YYG',
-    color: '#192a56',
-    link: 'https://github.com/scc-usc/ReCOVER-COVID-19',
+    color: '#cf6a87',
+    link: 'https://covid19-projections.com/',
     current: false,
   },
 ];

@@ -9,7 +9,7 @@ import Nav from 'react-bootstrap/Nav';
 const Header = ({ siteTitle }) => (
   <Navbar variant="light" bg="light" expand="lg">
     <div className="container-lg">
-      <Navbar.Brand className={'brand-text'} style={{ fontSize: '2em' }}>
+      <Navbar.Brand className={'brand-text'} style={{ fontSize: '1.5em' }}>
         <Link href="/">
           <Image height={100} width={100} src="/logo.png" />
         </Link>

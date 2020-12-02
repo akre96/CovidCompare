@@ -23,7 +23,7 @@ const ModelPredictionErrorPage = () => {
 
   // create query for dates
   const { data, error } = useSWR(
-    '/api/predictions/' + loc_id_map[selectedCountry] + '/' + modelName ,
+    '/api/predictions/' + loc_id_map[selectedCountry] + '/' + modelName,
     fetcher,
   );
 
@@ -44,14 +44,14 @@ const ModelPredictionErrorPage = () => {
   const ModelMonthButtons = months.map((m, i) => (
     <Button
       key={i}
-      className={"histMonth"}
+      className={'histMonth'}
       value={i}
       onClick={(e) => {
         var temp = [...months];
         temp[e.target.value].active = !temp[e.target.value].active;
         setModelMonths(temp);
       }}
-      variant={m.active ? 'secondary' : 'outline-secondary'}
+      variant={m.active ? 'secondary' : 'light'}
     >
       {dayjs(m.value).format('MMM YYYY')}
     </Button>
@@ -62,7 +62,11 @@ const ModelPredictionErrorPage = () => {
   return (
     <>
       <h2>Historical Forecasts</h2>
-      <p>All COVID-19 Forecasts and Errors</p>
+      <p>
+        This view shows all historical forecasts from each modelling group, as well as errors
+        (deviations from subsequently observed truth).
+      </p>
+      <p>You can subset the timeseries shown to a specific month of forecasts or set of months.</p>
       <p>
         <i>Warning:</i> May be slow to load
       </p>
@@ -89,10 +93,28 @@ const ModelPredictionErrorPage = () => {
       ) : (
         'Loading...'
       )}
+
       <div className="row justify-content-center">
-        <div className="col-lg-10" style={{overflowX: 'scroll'}}>
+        <div className="col-lg-10" style={{ overflowX: 'scroll' }}>
           <strong>Showing Models Created In:</strong>
           <ButtonGroup>{ModelMonthButtons}</ButtonGroup>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+            <Button
+              onClick={(e) => setModelMonths(months.map((m) => ({ ...m, active: false })))}
+              variant={'dark'}
+              className="mr-2"
+            >
+              All Off
+            </Button>
+            <Button
+              onClick={(e) => setModelMonths(months.map((m) => ({ ...m, active: true})))}
+              variant={'info'}
+            >
+              All On
+            </Button>
         </div>
       </div>
     </>

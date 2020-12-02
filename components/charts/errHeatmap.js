@@ -1,5 +1,8 @@
 import React from 'react';
 import { HeatMapGrid } from 'react-grid-heatmap';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import { FaInfoCircle } from 'react-icons/fa';
+import Popover from 'react-bootstrap/Popover';
 import PropTypes from 'prop-types';
 import models from '../../assets/models';
 
@@ -15,7 +18,7 @@ function transformDataHeatmap(data, region) {
   }
   data.map((d) => {
     if (d.super_region === region) {
-      if (!model_order[d.model_short]) return;
+      if (typeof model_order[d.model_short] === 'undefined') return;
       out[model_order[d.model_short]][d.errwk - 1] = d.value;
     }
   });
@@ -44,14 +47,35 @@ function ErrHeatmap({ data, region }) {
   return (
     <div className="px-4 hmap">
       <strong>Forecast week</strong>
+            <OverlayTrigger
+              placement="bottom"
+              trigger="click"
+              overlay={
+                <Popover>
+                  <Popover.Title as="h3">Forecast Week</Popover.Title>
+                  <Popover.Content>
+                  This heatmap shows predictive validity for each model, over weeks of extrapolation.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
+            </OverlayTrigger>
       <HeatMapGrid
         data={filteredData}
         cellHeight="3rem"
-        cellStyle={(_x, _y, ratio) => ({
-          background: `rgb(194, 54, 22, ${ratio})`,
-          fontSize: '.8rem',
-          color: `rgb(0, 0, 0, ${ratio / 2 + 0.4})`,
-        })}
+        cellStyle={(_x, _y, ratio) => {
+          if (ratio === null) {
+            return {
+              background: `rgb(255, 255, 255, 1)`,
+            };
+          }
+          return {
+            background: `rgb(194, 54, 22, ${ratio})`,
+            fontSize: '.8rem',
+            color: `rgb(0, 0, 0, ${ratio / 2 + 0.4})`,
+          };
+        }}
         cellRender={(x, y, value) => <div title={`Pos(${x}, ${y}) = ${value}`}>{value}</div>}
         square
         xLabels={xLabels}

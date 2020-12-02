@@ -99,7 +99,7 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
   if (modelData.length < 1) {
     modelData.push(defaultData.data[0]);
   }
-  const range = [truthData[0].date, modelData.slice(-1)[0].date];
+  const range = [truthData[0].date, dayjs().add(3, 'month').valueOf()];
   return (
     <>
       <strong>Prediction (Cumulative Deaths)</strong>
@@ -113,6 +113,7 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
             tickFormatter={(v) => dayjs(v).format('MMM DD')}
             domain={range}
             ticks={createDateTicks(range)}
+            allowDataOverflow
           />
           <YAxis dataKey="cases" tickFormatter={yTickFormatter} />
           <ReferenceLine x={today} stroke="black" strokeWidth={2} />
@@ -131,6 +132,7 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
             tickFormatter={(v) => dayjs(v).format('MMM DD')}
             domain={range}
             ticks={createDateTicks(range)}
+            allowDataOverflow
           />
           <YAxis dataKey="error" tickFormatter={yTickFormatter} />
           <ZAxis range={markerSize} />

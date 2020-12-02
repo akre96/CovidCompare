@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
         <title>covidcompare.io</title>
         <meta
           property="description"
-          content="Compare what international COVID-19 forecasts are predicting"
+          content="Compare predicted trajectories in COVID-19 mortality from major, global models"
         />
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,9 +22,9 @@ const Layout = ({ children }) => {
         <meta property="og:title" content="covidcompare.io" />
         <meta
           property="og:description"
-          content="Compare what international COVID-19 forecasts are predicting"
+          content="Compare predicted trajectories in COVID-19 mortality from major, global models"
         />
-        <meta property="og:image" content="/logo_text.png" />
+        <meta property="og:image" content="https://covidcompare.io/logo_text.png" />
         <script
           async
           defer
