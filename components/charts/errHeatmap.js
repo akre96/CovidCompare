@@ -48,6 +48,7 @@ function ErrHeatmap({ data, region }) {
     <div className="px-4 hmap">
       <strong>Forecast week</strong>
             <OverlayTrigger
+              rootClose
               placement="bottom"
               trigger="click"
               overlay={
