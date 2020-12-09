@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import Button from 'react-bootstrap/Button';
 import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 import Select from 'react-select';
 import useSWR from 'swr';
@@ -46,6 +47,7 @@ export default function IndexPage() {
   const [selectedCountry, setCountry] = useState('United States');
   const [rate, setRate] = useState(true);
   const [showZoom, setZoom] = useState(true);
+  const [showCI, setCI] = useState(false);
 
   // find location id and call api for data
   const loc_id = loc_id_map[selectedCountry];
@@ -65,9 +67,9 @@ export default function IndexPage() {
     { name: 'Deaths Per Day', value: true },
     { name: 'Cumulative Deaths', value: false },
   ];
-  const AxesToggle = axes.map((radio, idx) => (
+  const AxesToggle = axes.map((radio) => (
     <ToggleButton
-      key={idx}
+      key={radio.value}
       type="radio"
       variant="secondary"
       name="radio"
@@ -85,7 +87,7 @@ export default function IndexPage() {
       <Select
         options={selectList}
         onChange={(e) => setCountry(e.value)}
-        placeholder={'Select Country or US State...'}
+        placeholder="Select Country or US State..."
       />
       <br />
       <h3>{selectedCountry}</h3>
@@ -104,7 +106,19 @@ export default function IndexPage() {
           </ToggleButtonGroup>
         </div>
         <div className="col-3">
-          <button title={'Zoom in/out of model forecasts'} className="btn float-right">
+          {!rate && 
+            <Button
+              variant={showCI ? 'light' : 'secondary'}
+              onClick={() => setCI(!showCI)}
+            >
+              {showCI ? 'Hide CI' : 'Show CI'}
+            </Button>
+          }
+            <button
+              type="button"
+              title="Zoom in/out of model forecasts"
+              className="btn float-right"
+            >
             {!showZoom ? (
               <AiOutlineZoomIn fontSize={'1.5em'} onClick={(e) => setZoom(!showZoom)} />
             ) : (
@@ -119,6 +133,7 @@ export default function IndexPage() {
         errors={errors}
         sqlData={data}
         showRate={rate}
+        showCI={showCI}
         zoom={showZoom}
       />
     </>

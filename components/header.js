@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -9,7 +10,7 @@ import Nav from 'react-bootstrap/Nav';
 const Header = ({ siteTitle }) => (
   <Navbar variant="light" bg="light" expand="lg">
     <div className="container-lg">
-      <Navbar.Brand className={'brand-text'} style={{ fontSize: '1.25em' }}>
+      <Navbar.Brand className="brand-text" style={{ fontSize: '1.25em' }}>
         <Link href="/">
           <Image height={50} width={50} src="/logo.png" />
         </Link>
@@ -29,6 +30,9 @@ const Header = ({ siteTitle }) => (
           </Link>
           <Link href="/about" className="" passHref>
             <Nav.Link active>About</Nav.Link>
+          </Link>
+          <Link href="/team" className="" passHref>
+            <Nav.Link active>Team</Nav.Link>
           </Link>
         </Nav>
       </Navbar.Collapse>

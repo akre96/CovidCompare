@@ -2,7 +2,9 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'airbnb',
     'plugin:prettier/recommended',
+    'prettier/react',
   ],
   env: {
     es6: true,
@@ -21,6 +23,7 @@ module.exports = {
   rules: {
     'no-unused-vars': ['warn', { args: 'none', argsIgnorePattern: 'req|res|next|val' }],
     'prettier/prettier': ['error'],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
   },
   settings: {
     react: {

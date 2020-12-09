@@ -1,8 +1,8 @@
 // API endpoint to get model predictions for a given region
-import runQuery from '../../../lib/db';
 import { SQL } from 'sql-template-strings';
+import runQuery from '../../../lib/db';
 
-export default async function (req, res) {
+async function getForecast(req, res) {
   const {
     query: { region },
   } = req;
@@ -39,3 +39,4 @@ export default async function (req, res) {
     `);
   res.status(200).json({ data, truth });
 }
+export default getForecast;

@@ -80,7 +80,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
 
   // Checkboxes to plot/hide model predictions
   const ModelCheckboxes = activeModels.map((m, i) => (
-    <div key={i} className={'form-check form-check-inline'}>
+    <div key={i} className="form-check form-check-inline">
       <input
         type="checkbox"
         checked={m.active}
@@ -111,6 +111,24 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
       return;
     }
     return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} dot={false} />;
+  });
+  // lower/upper bounds of models
+  const model_errors = activeModels.map((m) => {
+    if (!m.active) {
+      return;
+    }
+    return (
+      <Area
+        key={`${m.name}_range`}
+        legendType="none"
+        type="monotone"
+        dataKey={`${m.name}_range`}
+        stroke={m.color}
+        fill={m.color}
+        data={data}
+        fillOpacity={0.5}
+      />
+    );
   });
 
   const AxisLabel = ({ axisType, x, y, width, height, stroke, children }) => {
@@ -188,6 +206,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
                 }
                 tickFormatter={yTickFormatter}
               />
+              {!showRate && showCI && model_errors}
               <Line
                 name="Recorded Deaths"
                 type="monotone"
@@ -207,7 +226,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
           </ResponsiveContainer>
         </div>
         <div className="col-md-2">
-          <div className={'form-group'} style={{ textAlign: 'left' }}>
+          <div className="form-group" style={{ textAlign: 'left' }}>
             <h5>Modeling Group</h5>
             {ModelCheckboxes}
           </div>
@@ -227,6 +246,7 @@ CompareModelsLine.propTypes = {
   errors: PropTypes.object,
   showRate: PropTypes.bool.isRequired,
   showCI: PropTypes.bool.isRequired,
+  zoom: PropTypes.bool.isRequired,
 };
 CompareModelsLine.defaultProps = {
   width: null,

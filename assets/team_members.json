@@ -1,0 +1,45 @@
+[
+    {
+        "name": "Joseph R. Friedman",
+        "picture": "/joe.jpg",
+        "bio": "Joseph Friedman is an MD/PhD student at UCLA, where he is currently completing a PhD in the social medicine track of the medical informatics program, in collaboration with the Center for Social Medicine. His undergraduate work was ethnographic in nature and he subsequently completed a three-year data science fellowship at the Institute for Health Metrics at the University of Washington. His current research focuses on using data science and qualitative methods to assess health disparities and their structural drivers.",
+        "links": [
+            {
+                "name": "Google Scholar", 
+                "url": "https://scholar.google.com/citations?user=Vkr2uEwAAAAJ&hl=en"
+            },
+            {
+                "name": "@JosephRFriedman", 
+                "url": "https://twitter.com/JosephRFriedman"
+            }
+
+        ]
+    },
+    {
+        "name": "Patrick Y. Liu",
+        "picture": "/patty.png",
+        "bio": "Patty Liu (he/him) is a 4th Year Medical Student at the David Geffen School of Medicine. He is passionate about using data to promote health equity, with a previous focus in child and maternal health access and social determinants of health. He completed his MPH in Global Health Metrics at the  Institute of Health Metrics and evaluation at the University of Washington, and his undergraduate training (BA) in Neuroscience and Economics at Pomona College.",
+        "links": []
+    },
+{
+    "name": "Samir Akre",
+    "picture": "/samir.jpg",
+    "bio": "Samir Akre (he/him) is a PhD student at UCLA studying Medical Informatics. His specific area of interest is in using mobile health with social determinants to help bridge health disparities. He did his undergraduate in Biomedical Engineering at UC Davis.",
+    "links": [
+        {
+            "name": "Google Scholar", 
+            "url": "https://scholar.google.com/citations?user=1SN6fTUAAAAJ&hl=en"
+        },
+        {
+            "name": "@samirakre", 
+            "url": "https://twitter.com/samirakre"
+        },
+        {
+            "name": "Personal Website",
+            "url": "http://samirakre.com"
+        }
+
+    ]
+}
+
+]
