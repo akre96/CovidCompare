@@ -6,26 +6,26 @@ import Popover from 'react-bootstrap/Popover';
 import PropTypes from 'prop-types';
 import models from '../../assets/models';
 
-let model_order = {};
+const modelOrder = {};
 models.map((m, i) => {
-  model_order[m.name] = i;
+  modelOrder[m.name] = i;
 });
 
 function transformDataHeatmap(data, region) {
-  var out = Array(models.length).fill(null);
+  const out = Array(models.length).fill(null);
   for (let i = 0; i < models.length; i++) {
     out[i] = Array(12).fill(null);
   }
   data.map((d) => {
     if (d.super_region === region) {
-      if (typeof model_order[d.model_short] === 'undefined') return;
-      out[model_order[d.model_short]][d.errwk - 1] = d.value;
+      if (typeof modelOrder[d.model_short] === 'undefined') return;
+      out[modelOrder[d.model_short]][d.errwk - 1] = d.value;
     }
   });
   return out;
 }
 function ErrHeatmap({ data, region }) {
-  let xLabels = [];
+  const xLabels = [];
   for (let i = 1; i <= 12; i++) {
     xLabels.push(i);
   }
@@ -47,21 +47,21 @@ function ErrHeatmap({ data, region }) {
   return (
     <div className="px-4 hmap">
       <strong>Forecast week</strong>
-            <OverlayTrigger
-              rootClose
-              placement="bottom"
-              trigger="click"
-              overlay={
-                <Popover>
-                  <Popover.Title as="h3">Forecast Week</Popover.Title>
-                  <Popover.Content>
-                  This heatmap shows predictive validity for each model, over weeks of extrapolation.
-                  </Popover.Content>
-                </Popover>
-              }
-            >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
-            </OverlayTrigger>
+      <OverlayTrigger
+        rootClose
+        placement="bottom"
+        trigger="click"
+        overlay={
+          <Popover>
+            <Popover.Title as="h3">Forecast Week</Popover.Title>
+            <Popover.Content>
+              This heatmap shows predictive validity for each model, over weeks of extrapolation.
+            </Popover.Content>
+          </Popover>
+        }
+      >
+        <FaInfoCircle fontSize="1rem" style={{ marginTop: '-15px', marginLeft: '5px' }} />
+      </OverlayTrigger>
       <HeatMapGrid
         data={filteredData}
         cellHeight="3rem"
@@ -88,7 +88,7 @@ function ErrHeatmap({ data, region }) {
 }
 ErrHeatmap.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  region: PropTypes.string,
+  region: PropTypes.string.isRequired,
 };
 
 export default ErrHeatmap;

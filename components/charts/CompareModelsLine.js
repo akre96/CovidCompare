@@ -36,7 +36,6 @@ const currentModels = models
  * @param {number} height - height of component in pixels
  * @param {object} data - data from /api/[region].js api call
  * @param {bool} showRate - toggles showing deaths/day or cumulative deaths
- * @return {ReturnValueDataTypeHere} Brief description of the returning value here.
  */
 function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) {
   // React Hook for which models to display
@@ -106,14 +105,14 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
   ));
 
   // models to plot
-  const model_lines = activeModels.map((m) => {
+  const modelLines = activeModels.map((m) => {
     if (!m.active) {
       return;
     }
     return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} dot={false} />;
   });
   // lower/upper bounds of models
-  const model_errors = activeModels.map((m) => {
+  const modelErrors = activeModels.map((m) => {
     if (!m.active) {
       return;
     }
@@ -131,17 +130,6 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
     );
   });
 
-  const AxisLabel = ({ axisType, x, y, width, height, stroke, children }) => {
-    const isVert = axisType === 'yAxis';
-    const cx = isVert ? x : x + width / 2;
-    const cy = isVert ? height / 2 + y : y + height + 10;
-    const rot = isVert ? `270 ${cx} ${cy}` : 0;
-    return (
-      <text x={cx} y={cy} transform={`rotate(${rot})`} textAnchor="middle" stroke={stroke}>
-        {children}
-      </text>
-    );
-  };
   // Hides tooltip for lower/upper bounds
   function tooltipFormatter(v, n, p) {
     try {
@@ -176,7 +164,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
     }
     return `${(v / 1000).toFixed(2)}k`;
   }
-  let range = [allData[0].date, allData.splice(-1)[0].date];
+  let range = [allData[0].date, allData[allData.length - 1].date];
   if (zoom) {
     range = [dayjs().subtract(3, 'month').valueOf(), range[1]];
   }
@@ -206,7 +194,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
                 }
                 tickFormatter={yTickFormatter}
               />
-              {!showRate && showCI && model_errors}
+              {!showRate && showCI && modelErrors}
               <Line
                 name="Recorded Deaths"
                 type="monotone"
@@ -215,7 +203,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
                 dot={false}
                 strokeWidth={2}
               />
-              {model_lines}
+              {modelLines}
               <ReferenceLine x={today} stroke="black" strokeWidth={2} />
               <Tooltip
                 formatter={tooltipFormatter}

@@ -3,7 +3,7 @@
  * @author Samir Akre <sakre@g.ucla.edu>
  */
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import micromark from 'micromark';
 
 const md = `
 ## About covidcompare
@@ -42,6 +42,10 @@ Predictive performance of international COVID-19 mortality forecasting models Jo
 - Patty Liu: @pyliu47
 - Samir Akre: @samirakre
 `;
-const AboutPage = () => <ReactMarkdown>{md}</ReactMarkdown>;
+
+const AboutPage = () => {
+  const htmlString = micromark(md);
+  return <div dangerouslySetInnerHTML={{ __html: htmlString }} />;
+};
 
 export default AboutPage;
