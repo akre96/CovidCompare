@@ -99,6 +99,7 @@ const ModelErrorPage = () => {
             <OverlayTrigger
               placement="bottom"
               trigger="click"
+              rootClose
               overlay={
                 <Popover>
                   <Popover.Title as="h3">Region Options</Popover.Title>
@@ -130,6 +131,7 @@ const ModelErrorPage = () => {
           <h5>
             Error Metric
             <OverlayTrigger
+              rootClose
               placement="bottom"
               trigger="click"
               overlay={
@@ -175,6 +177,7 @@ const ModelErrorPage = () => {
             <OverlayTrigger
               placement="auto"
               trigger="click"
+              rootClose
               overlay={
                 <Popover>
                   <Popover.Title as="h3">Interpretting Model Month</Popover.Title>
@@ -201,6 +204,7 @@ const ModelErrorPage = () => {
             Error Type
             <OverlayTrigger
               placement="auto"
+              rootClose
               trigger="click"
               overlay={
                 <Popover>
