@@ -16,7 +16,7 @@ const Layout = ({ children }) => (
       />
       <meta name="robots" content="index, follow" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta charset="UTF-8" />
+      <meta charSet="UTF-8" />
       <meta property="og:url" content="https://covidcompare.io" />
       <meta property="og:type" content="website" />
       <meta property="og:title" content="covidcompare.io" />
