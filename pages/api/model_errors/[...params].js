@@ -1,6 +1,6 @@
 // API endpoint to get model error data
-import runQuery from '../../../lib/db';
 import { SQL } from 'sql-template-strings';
+import runQuery from '../../../lib/db';
 
 export default async function (req, res) {
   const {

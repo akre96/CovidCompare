@@ -9,38 +9,40 @@ import Button from 'react-bootstrap/Button';
 import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 import Select from 'react-select';
 import useSWR from 'swr';
-import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 import fetcher from '../lib/fetcher';
+import models from '../assets/models';
 
 import CompareModelsLine from '../components/charts/CompareModelsLine';
 
-import loc_id_map from '../assets/loc_id_map.json';
+import locIdMap from '../assets/loc_id_map.json';
 
-// Displays graph of data prediction if data available
-function CountryChart({ data, errors, rate, selectedCountry }) {
-  if (errors) return 'An error has occurred.';
-  if (!data) return <div className="row">Loading...</div>;
-  return (
-    <div key={selectedCountry}>
-      <CompareModelsLine height={400} sqlData={data} showRate={rate} />
-    </div>
-  );
+// Table rows for model showing model date
+function ModelInfo() {
+  const { data } = useSWR('/api/forecast/model_dates', fetcher);
+  const modelInfo = models
+    .filter((m) => m.current)
+    .map((m) => {
+      if (data) {
+        const modelDate = data.data.filter((m2) => m2.model_short === m.name);
+        return {
+          ...m,
+          model_date: dayjs(modelDate[0].model_date).format('MMM DD YYYY'),
+        };
+      }
+      return {
+        ...m,
+        model_date: '...loading',
+      };
+    })
+    .map((m) => (
+      <tr key={m.name}>
+        <td style={{ color: m.color }}>{m.name}</td>
+        <td>{m.model_date}</td>
+      </tr>
+    ));
+  return modelInfo;
 }
-CountryChart.propTypes = {
-  data: PropTypes.shape({
-    data: PropTypes.array,
-  }),
-  errors: PropTypes.object,
-  // rate: show case rate per day
-  rate: PropTypes.bool.isRequired,
-  // selectedCountry: which region to present
-  selectedCountry: PropTypes.string.isRequired,
-};
-CountryChart.defaultProps = {
-  data: null,
-  errors: null,
-};
-
 // Component that is returned for home page
 export default function IndexPage() {
   // React Hooks for current country and y-axis
@@ -50,14 +52,15 @@ export default function IndexPage() {
   const [showCI, setCI] = useState(false);
 
   // find location id and call api for data
-  const loc_id = loc_id_map[selectedCountry];
-  const { data, errors } = useSWR('/api/predictions/' + loc_id, fetcher);
+  const output = rate ? 'daily' : 'cumulative';
+  const locId = locIdMap[selectedCountry];
+  const { data, errors } = useSWR(`/api/forecast/${locId}/${output}`, fetcher);
+
   if (errors) {
     return <h3>Error collecting data</h3>;
   }
-
   // List of possible regions
-  const selectList = Object.keys(loc_id_map).map((loc) => ({
+  const selectList = Object.keys(locIdMap).map((loc) => ({
     value: loc,
     label: loc,
   }));
@@ -92,50 +95,55 @@ export default function IndexPage() {
       <br />
       <h3>{selectedCountry}</h3>
       <div className="row">
-        
         <div className="col-md-10 row">
-        <div className="col-9">
-          <ToggleButtonGroup
-            type="radio"
-            name="y-axis"
-            onChange={(e) => setRate(e)}
-            value={rate}
-            className="mb-2 float-left"
-          >
-            {AxesToggle}
-          </ToggleButtonGroup>
-        </div>
-        <div className="col-3">
-          {!rate && 
-            <Button
-              variant={showCI ? 'light' : 'secondary'}
-              onClick={() => setCI(!showCI)}
+          <div className="col-8">
+            <ToggleButtonGroup
+              type="radio"
+              name="y-axis"
+              onChange={(e) => setRate(e)}
+              value={rate}
+              className="mb-2 float-left"
             >
+              {AxesToggle}
+            </ToggleButtonGroup>
+          </div>
+          <div className="col-4">
+            <Button variant={showCI ? 'light' : 'secondary'} onClick={() => setCI(!showCI)}>
               {showCI ? 'Hide CI' : 'Show CI'}
             </Button>
-          }
             <button
               type="button"
               title="Zoom in/out of model forecasts"
               className="btn float-right"
             >
-            {!showZoom ? (
-              <AiOutlineZoomIn fontSize={'1.5em'} onClick={(e) => setZoom(!showZoom)} />
-            ) : (
-              <AiOutlineZoomOut fontSize={'1.5em'} onClick={(e) => setZoom(!showZoom)} />
-            )}
-          </button>
-        </div>
+              {!showZoom ? (
+                <AiOutlineZoomIn fontSize="1.5em" onClick={(e) => setZoom(!showZoom)} />
+              ) : (
+                <AiOutlineZoomOut fontSize="1.5em" onClick={(e) => setZoom(!showZoom)} />
+              )}
+            </button>
+          </div>
         </div>
       </div>
       <CompareModelsLine
         height={400}
-        errors={errors}
         sqlData={data}
         showRate={rate}
         showCI={showCI}
         zoom={showZoom}
       />
+      <br />
+      <table className="table table-sm">
+        <thead>
+          <tr>
+            <th>Model Name</th>
+            <th>Predictions Last Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ModelInfo />
+        </tbody>
+      </table>
     </>
   );
 }

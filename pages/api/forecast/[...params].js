@@ -4,20 +4,39 @@ import runQuery from '../../../lib/db';
 
 async function getForecast(req, res) {
   const {
-    query: { region },
+    query: { params },
   } = req;
-  const truth = await runQuery(SQL`
+  const [region, output] = params.splice(0, 2);
+  let forecastTable;
+  let truthTable;
+  if (output === 'daily') {
+    forecastTable = 'currentdaily';
+    truthTable = 'truthdaily';
+  } else if (output === 'cumulative') {
+    forecastTable = 'currentforecast';
+    truthTable = 'truth';
+  } else {
+    throw 'Error: Output variable not supported';
+  }
+  const truth = await runQuery(
+    SQL`
     SELECT
         date,
         truth 
-    FROM truth
+    FROM `
+      .append(truthTable)
+      .append(
+        SQL`
     WHERE ihme_loc_id = ${region}
     ORDER BY date
-`);
-  const data = await runQuery(SQL`
+`,
+      ),
+  );
+  const data = await runQuery(
+    SQL`
         SELECT
-            currentforecast.ihme_loc_id,
-            currentforecast.date,
+            ihme_loc_id,
+            date,
             Delphi,
             IHME_MS_SEIR,
             Imperial,
@@ -33,10 +52,15 @@ async function getForecast(req, res) {
             Imperial_l,
             LANL_l,
             SIKJalpha_l
-        FROM currentforecast
-        WHERE currentforecast.ihme_loc_id = ${region}
+        FROM `
+      .append(forecastTable)
+      .append(
+        SQL`
+        WHERE ihme_loc_id = ${region}
         ORDER BY date
-    `);
+    `,
+      ),
+  );
   res.status(200).json({ data, truth });
 }
 export default getForecast;

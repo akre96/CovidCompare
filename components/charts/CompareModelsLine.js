@@ -19,8 +19,6 @@ import {
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import models from '../../assets/models';
-import rollingAverage from '../../lib/rollingAverage';
-import caseRate from '../../lib/caseRate';
 import createDateTicks from '../../lib/createDateTicks';
 
 // Get updated models only
@@ -37,30 +35,26 @@ const currentModels = models
  * @param {object} data - data from /api/[region].js api call
  * @param {bool} showRate - toggles showing deaths/day or cumulative deaths
  */
-function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) {
+function CompareModelsLine({ height, sqlData, showRate, showCI, zoom }) {
   // React Hook for which models to display
   const [activeModels, setModels] = useState(currentModels);
 
-  if (errors) return 'Error encountered';
   // today used to draw reference line
   const todayObj = dayjs();
   const today = todayObj.valueOf();
 
   // just names of models
-  const model_names = currentModels.map((m) => m.name);
-
-  // models and ground truth
-  const base_names = [...model_names, 'truth'];
+  const modelNames = currentModels.map((m) => m.name);
 
   // Delete model predictions before today, fill null days
 
-  sqlData.truth.map((d) => {
+  sqlData.truth.forEach((d) => {
     d.date = dayjs(d.date).valueOf();
   });
-  sqlData.data.map((d) => {
+  sqlData.data.forEach((d) => {
     d.date = dayjs(d.date).valueOf();
     // Format prediction bounds for ReCharts
-    model_names.map((m) => {
+    modelNames.forEach((m) => {
       d[`${m}_range`] = [d[`${m}_l`], d[`${m}_u`]];
     });
   });
@@ -70,16 +64,9 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
   });
   const allData = [...sqlData.truth, ...data];
 
-  // Rolling average run on daily case rate. Lower and upper bounds not used for rate
-  const rate_data = rollingAverage(
-    caseRate(allData, base_names),
-    7, // seven days
-    base_names,
-  );
-
   // Checkboxes to plot/hide model predictions
   const ModelCheckboxes = activeModels.map((m, i) => (
-    <div key={i} className="form-check form-check-inline">
+    <div key={m.name} className="form-check form-check-inline">
       <input
         type="checkbox"
         checked={m.active}
@@ -87,7 +74,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
         id={m.name}
         value={i}
         onChange={(e) => {
-          let tempModels = [...activeModels];
+          const tempModels = [...activeModels];
           tempModels[e.target.value] = {
             ...activeModels[e.target.value],
             active: !activeModels[e.target.value].active,
@@ -105,40 +92,38 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
   ));
 
   // models to plot
-  const modelLines = activeModels.map((m) => {
-    if (!m.active) {
-      return;
-    }
-    return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} dot={false} />;
-  });
+  const modelLines = activeModels
+    .filter((m) => m.active)
+    .map((m) => {
+      return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} dot={false} />;
+    });
   // lower/upper bounds of models
-  const modelErrors = activeModels.map((m) => {
-    if (!m.active) {
-      return;
-    }
-    return (
-      <Area
-        key={`${m.name}_range`}
-        legendType="none"
-        type="monotone"
-        dataKey={`${m.name}_range`}
-        stroke={m.color}
-        fill={m.color}
-        data={data}
-        fillOpacity={0.5}
-      />
-    );
-  });
+  const modelErrors = activeModels
+    .filter((m) => m.active)
+    .map((m) => {
+      return (
+        <Area
+          key={`${m.name}_range`}
+          legendType="none"
+          type="monotone"
+          dataKey={`${m.name}_range`}
+          stroke={m.color}
+          fill={m.color}
+          data={data}
+          fillOpacity={0.5}
+        />
+      );
+    });
 
   // Hides tooltip for lower/upper bounds
   function tooltipFormatter(v, n, p) {
     try {
       v.toFixed(2);
       if (n === 'Recorded Deaths') return `${(v / 1000).toFixed(2)}k`;
-      if (p.payload[p.name + '_range'][0] !== null && !showRate) {
+      if (p.payload[`${p.name}_range`][0] !== null) {
         return `${(v / 1000).toFixed(2)}k (95% CI ${(
-          p.payload[p.name + '_range'][0] / 1000
-        ).toFixed(2)}k - ${(p.payload[p.name + '_range'][1] / 1000).toFixed(2)}k)`;
+          p.payload[`${p.name}_range`][0] / 1000
+        ).toFixed(2)}k - ${(p.payload[`${p.name}_range`][1] / 1000).toFixed(2)}k)`;
       }
       // just checks that number and not range
       return `${(v / 1000).toFixed(2)}k`;
@@ -173,9 +158,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
       <div className="row">
         <div className="col-md-10">
           <ResponsiveContainer height={height}>
-            <ComposedChart
-              data={showRate ? rate_data : allData}
-            >
+            <ComposedChart data={allData}>
               <CartesianGrid strokeDasharray="5 5" />
               <XAxis
                 allowDataOverflow
@@ -194,7 +177,7 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
                 }
                 tickFormatter={yTickFormatter}
               />
-              {!showRate && showCI && modelErrors}
+              {showCI && modelErrors}
               <Line
                 name="Recorded Deaths"
                 type="monotone"
@@ -225,19 +208,16 @@ function CompareModelsLine({ height, sqlData, showRate, errors, showCI, zoom }) 
 }
 
 CompareModelsLine.propTypes = {
-  width: PropTypes.number,
   height: PropTypes.number,
   sqlData: PropTypes.shape({
     data: PropTypes.array,
     truth: PropTypes.array,
   }),
-  errors: PropTypes.object,
   showRate: PropTypes.bool.isRequired,
   showCI: PropTypes.bool.isRequired,
   zoom: PropTypes.bool.isRequired,
 };
 CompareModelsLine.defaultProps = {
-  width: null,
   height: 500,
   sqlData: { data: [{ date: dayjs.valueOf() }], truth: [{ date: dayjs().valueOf() }] },
 };

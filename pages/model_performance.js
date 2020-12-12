@@ -1,3 +1,7 @@
+/**
+ * @file Displays heatmap of model errors and allows parameter selection
+ * @author Samir Akre <sakre@g.ucla.edu>
+ */
 import React, { useState } from 'react';
 import Select from 'react-select';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -7,10 +11,10 @@ import useSWR from 'swr';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import PropTypes from 'prop-types';
-dayjs.extend(customParseFormat);
-
 import fetcher from '../lib/fetcher';
 import ErrHeatmap from '../components/charts/errHeatmap';
+
+dayjs.extend(customParseFormat);
 
 const variableTypes = [
   'Median Absolute Percent Error',
@@ -30,10 +34,9 @@ const superRegions = [
 ];
 
 // Selector for month
-function MonthSelect({ data, errors, onChange, value }) {
-  if (errors) return 'Error loading available months';
-  if (!data) {
-    return <Select options={[]} defaultValue={value} placeholder="Loading..." isLoading={true} />;
+function MonthSelect({ data, onChange, value }) {
+  if (data.data === []) {
+    return <Select options={[]} defaultValue={value} placeholder="Loading..." isLoading />;
   }
   data.data.sort(
     (a, b) =>
@@ -53,12 +56,17 @@ MonthSelect.propTypes = {
       }),
     ),
   }),
-  errors: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.shape({
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+MonthSelect.defaultProps = {
+  data: {
+    data: [],
+  },
 };
 
 const ModelErrorPage = () => {
@@ -68,7 +76,7 @@ const ModelErrorPage = () => {
   const [variableType, setVariableType] = useState(variableTypes[0]);
   const [superRegion, setSuperRegion] = useState(superRegions[0]);
 
-  const { data: months, errors: m_errors } = useSWR('/api/model_errors/available_months', fetcher);
+  const { data: months, errors: mErrors } = useSWR('/api/model_errors/available_months', fetcher);
   const { data: errData } = useSWR(
     `/api/model_errors/${modelMonth}/${errType}/${variableType}`,
     fetcher,
@@ -116,7 +124,7 @@ const ModelErrorPage = () => {
                 </Popover>
               }
             >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
+              <FaInfoCircle fontSize="1rem" style={{ marginTop: '-15px', marginLeft: '5px' }} />
             </OverlayTrigger>
           </h5>
           <Select
@@ -162,7 +170,7 @@ const ModelErrorPage = () => {
                 </Popover>
               }
             >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
+              <FaInfoCircle fontSize="1rem" style={{ marginTop: '-15px', marginLeft: '5px' }} />
             </OverlayTrigger>
           </h5>
           <Select
@@ -189,13 +197,13 @@ const ModelErrorPage = () => {
                 </Popover>
               }
             >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
+              <FaInfoCircle fontSize="1rem" style={{ marginTop: '-15px', marginLeft: '5px' }} />
             </OverlayTrigger>
           </h5>
           <MonthSelect
             data={months}
             onChange={(e) => setMonth(e.value)}
-            errors={m_errors}
+            errors={mErrors}
             value={{ value: modelMonth, label: modelMonth }}
           />
         </div>
@@ -212,17 +220,19 @@ const ModelErrorPage = () => {
                   <Popover.Content>
                     <ul>
                       <li>
-                    <strong>Total cumulative errors</strong> are calculated relative to the total amount of cumulative mortality at any given time. 
+                        <strong>Total cumulative errors</strong> are calculated relative to the
+                        total amount of cumulative mortality at any given time.
                       </li>
                       <li>
-                      <strong>Weekly errors</strong> are calculated only on the new mortality occurring each week.
+                        <strong>Weekly errors</strong> are calculated only on the new mortality
+                        occurring each week.
                       </li>
                     </ul>
                   </Popover.Content>
                 </Popover>
               }
             >
-              <FaInfoCircle fontSize={'1rem'} style={{ marginTop: '-15px', marginLeft: '5px' }} />
+              <FaInfoCircle fontSize="1rem" style={{ marginTop: '-15px', marginLeft: '5px' }} />
             </OverlayTrigger>
           </h5>
           <Select

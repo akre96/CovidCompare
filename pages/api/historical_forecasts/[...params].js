@@ -1,9 +1,8 @@
 /**
  * @file SQL query to get all model predictions for a given region and model
  */
-import runQuery from '../../../lib/db';
 import { SQL } from 'sql-template-strings';
-import dayjs from 'dayjs';
+import runQuery from '../../../lib/db';
 
 export default async function (req, res) {
   const {

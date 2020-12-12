@@ -1,6 +1,6 @@
 // API endpoint to get regions with forecast data
-import runQuery from '../../lib/db';
 import { SQL } from 'sql-template-strings';
+import runQuery from '../../lib/db';
 
 export default async function (_req, res) {
   const data = await runQuery(SQL`

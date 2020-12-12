@@ -34,10 +34,10 @@ const Layout = ({ children }) => (
     </Head>
     <Header siteTitle="covidcompare.io" />
     <br />
-    <div className="container-lg">
+    <div className="container">
       <main>{children}</main>
     </div>
-    <div className="container-lg">
+    <div className="container">
       <footer
         className="row"
         style={{

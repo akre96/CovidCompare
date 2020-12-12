@@ -1,3 +1,7 @@
+/**
+ * @file Show all forecasts and associated errors for a model as a scatter plot
+ * @author Samir Akre <sakre@g.ucla.edu>
+ */
 import React, { useState } from 'react';
 import Select from 'react-select';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -9,7 +13,7 @@ import ModelErrorLine from '../components/charts/modelErrorLine';
 import fetcher from '../lib/fetcher';
 import createDateTicks from '../lib/createDateTicks';
 
-import loc_id_map from '../assets/loc_id_map.json';
+import locIdMap from '../assets/loc_id_map.json';
 import models from '../assets/models';
 
 const ModelPredictionErrorPage = () => {
@@ -23,12 +27,12 @@ const ModelPredictionErrorPage = () => {
 
   // create query for dates
   const { data, error } = useSWR(
-    '/api/predictions/' + loc_id_map[selectedCountry] + '/' + modelName,
+    `/api/historical_forecasts/${locIdMap[selectedCountry]}/${modelName}`,
     fetcher,
   );
 
   // List of possible regions
-  const regionSelectList = Object.keys(loc_id_map).map((loc) => ({
+  const regionSelectList = Object.keys(locIdMap).map((loc) => ({
     value: loc,
     label: loc,
   }));
@@ -43,11 +47,11 @@ const ModelPredictionErrorPage = () => {
   }
   const ModelMonthButtons = months.map((m, i) => (
     <Button
-      key={i}
-      className={'histMonth'}
+      key={m.value}
+      className="histMonth"
       value={i}
       onClick={(e) => {
-        var temp = [...months];
+        const temp = [...months];
         temp[e.target.value].active = !temp[e.target.value].active;
         setModelMonths(temp);
       }}
@@ -88,12 +92,7 @@ const ModelPredictionErrorPage = () => {
           />
         </div>
       </div>
-      {true ? (
-        <ModelErrorLine sqlData={data} activeMonths={activeMonths} name={modelName} />
-      ) : (
-        'Loading...'
-      )}
-
+      <ModelErrorLine sqlData={data} activeMonths={activeMonths} name={modelName} />
       <div className="row justify-content-center">
         <div className="col-lg-10" style={{ overflowX: 'scroll' }}>
           <strong>Showing Models Created In:</strong>
@@ -104,14 +103,14 @@ const ModelPredictionErrorPage = () => {
         <div className="col">
           <Button
             onClick={(e) => setModelMonths(months.map((m) => ({ ...m, active: false })))}
-            variant={'dark'}
+            variant="dark"
             className="mr-2"
           >
             All Off
           </Button>
           <Button
             onClick={(e) => setModelMonths(months.map((m) => ({ ...m, active: true })))}
-            variant={'info'}
+            variant="info"
           >
             All On
           </Button>

@@ -24,12 +24,12 @@ const defaultData = { data: [{ date: dayjs().valueOf() }], truth: [{ date: dayjs
 function ModelErrorLine({ sqlData, name, activeMonths }) {
   const markerSize = [20, 20];
   const today = dayjs().valueOf();
-  var fill = '#7f8fa6';
-  models.map((m) => {
-    if (m.name === name) {
+  let fill = '#7f8fa6';
+  models
+    .filter((m) => m.name === name)
+    .forEach((m) => {
       fill = m.color;
-    }
-  });
+    });
   const truthData = sqlData.truth.map((t) => ({
     date: dayjs(t.date).valueOf(),
     cases: t.truth,
@@ -151,12 +151,20 @@ ModelErrorLine.propTypes = {
     data: PropTypes.array,
     truth: PropTypes.array,
   }),
-  activeMonths: PropTypes.arrayOf(PropTypes.number),
+  activeMonths: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.number,
+      active: PropTypes.bool,
+    }),
+  ),
   name: PropTypes.string.isRequired,
 };
 ModelErrorLine.defaultProps = {
   sqlData: defaultData,
-  activeMonths: createDateTicks([dayjs('2020-03-25').valueOf(), dayjs().valueOf()]),
+  activeMonths: createDateTicks([dayjs('2020-03-25').valueOf(), dayjs().valueOf()]).map((d) => ({
+    value: d,
+    active: true,
+  })),
 };
 
 export default ModelErrorLine;
