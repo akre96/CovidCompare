@@ -125,7 +125,7 @@ export default function IndexPage() {
             title="Apply/remove 7 day moving average filter"
             variant={useFilter ? 'outline-dark' : 'secondary'}
           >
-            {useFilter ? 'Unsmooth' : 'Smooth'}
+            {useFilter ? 'Unsmooth' : 'Smooth'}*
           </Button>
           <Button
             size="sm"
@@ -155,6 +155,7 @@ export default function IndexPage() {
         filter={useFilter}
         filterDays={filterDays}
       />
+      <p style={{ color: 'gray' }}>* 7 day moving average filter used for smoothing</p>
       <br />
       <table className="table table-sm">
         <thead>
