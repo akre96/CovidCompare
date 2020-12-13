@@ -42,10 +42,10 @@ function ModelInfo() {
       <tr key={m.name}>
         <td style={{ color: m.color }}>
           {m.name}
-        <a href={m.link} rel="noreferrer" target="_blank">
-          <BsBoxArrowRight style={{ marginLeft: '5px' }} />
-        </a>
-          </td>
+          <a href={m.link} rel="noreferrer" target="_blank">
+            <BsBoxArrowRight style={{ marginLeft: '5px' }} />
+          </a>
+        </td>
         <td>{m.model_date}</td>
       </tr>
     ));
@@ -58,7 +58,8 @@ export default function IndexPage() {
   const [rate, setRate] = useState(true);
   const [showZoom, setZoom] = useState(true);
   const [showCI, setCI] = useState(false);
-  const [filterDays, setFilterDays] = useState(7);
+  // const [filterDays, setFilterDays] = useState(7);
+  const filterDays = 7;
   const [useFilter, setUseFilter] = useState(true);
 
   // find location id and call api for data
@@ -87,6 +88,7 @@ export default function IndexPage() {
       variant="secondary"
       name="radio"
       value={radio.value}
+      size="sm"
       style={{ zIndex: 'auto' }}
     >
       {radio.name}
@@ -105,47 +107,43 @@ export default function IndexPage() {
       <br />
       <h3>{selectedCountry}</h3>
       <div className="row">
-        <div className="col-md-10 row">
-          <div className="col-8">
-            <ToggleButtonGroup
-              type="radio"
-              name="y-axis"
-              onChange={(e) => setRate(e)}
-              value={rate}
-              className="mb-2 float-left"
-            >
-              {AxesToggle}
-            </ToggleButtonGroup>
-          </div>
-          <div className="col-4">
-            <Button variant={showCI ? 'light' : 'secondary'} onClick={() => setCI(!showCI)}>
-              {showCI ? 'Hide CI' : 'Show CI'}
-            </Button>
-            <button
-              type="button"
-              title="Zoom in/out of model forecasts"
-              className="btn float-right"
-            >
-              {!showZoom ? (
-                <AiOutlineZoomIn fontSize="1.5em" onClick={(e) => setZoom(!showZoom)} />
-              ) : (
-                <AiOutlineZoomOut fontSize="1.5em" onClick={(e) => setZoom(!showZoom)} />
-              )}
-            </button>
-          </div>
+        <div className="col-6">
+          <ToggleButtonGroup
+            type="radio"
+            name="y-axis"
+            onChange={(e) => setRate(e)}
+            value={rate}
+            className="mb-2 float-left"
+          >
+            {AxesToggle}
+          </ToggleButtonGroup>
         </div>
-        <div className="col-md-10 ml-2 my-2 row">
-          <Slider min={1} max={30} value={filterDays} onChange={(value) => setFilterDays(value)} />
-        </div>
-        <div className="col-md-10 mb-2 row">
-          <div className="col-8">
-            <strong>Moving Average: {filterDays} Days</strong>
-            <Button 
+        <div className="col-6">
+          <Button
             onClick={() => setUseFilter(!useFilter)}
-            className="ml-2" variant={useFilter ? 'outline-dark' : 'info'} size="sm">
-              {useFilter ? 'Remove Filter' : 'Apply Filter'}
-            </Button>
-          </div>
+            size="sm"
+            title="Apply/remove 7 day moving average filter"
+            variant={useFilter ? 'outline-dark' : 'secondary'}
+          >
+            {useFilter ? 'Unsmooth' : 'Smooth'}
+          </Button>
+          <Button
+            size="sm"
+            title="Show 95% Confidence Intervals"
+            variant={showCI ? 'outline-dark' : 'secondary'}
+            className="mx-1"
+            onClick={() => setCI(!showCI)}
+          >
+            {showCI ? 'Hide CI' : 'Show CI'}
+          </Button>
+          <Button
+            title="Zoom in/out of model forecasts"
+            variant={showZoom ? 'outline-dark' : 'secondary'}
+            size="sm"
+            onClick={(e) => setZoom(!showZoom)}
+          >
+            {!showZoom ? <AiOutlineZoomIn /> : <AiOutlineZoomOut />}
+          </Button>
         </div>
       </div>
       <CompareModelsLine
