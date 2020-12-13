@@ -8,6 +8,8 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import Button from 'react-bootstrap/Button';
 import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 import Select from 'react-select';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 import fetcher from '../lib/fetcher';
@@ -50,6 +52,8 @@ export default function IndexPage() {
   const [rate, setRate] = useState(true);
   const [showZoom, setZoom] = useState(true);
   const [showCI, setCI] = useState(false);
+  const [filterDays, setFilterDays] = useState(7);
+  const [useFilter, setUseFilter] = useState(false);
 
   // find location id and call api for data
   const output = rate ? 'daily' : 'cumulative';
@@ -124,6 +128,19 @@ export default function IndexPage() {
             </button>
           </div>
         </div>
+        <div className="col-md-10 ml-2 my-2 row">
+          <Slider min={1} max={30} value={filterDays} onChange={(value) => setFilterDays(value)} />
+        </div>
+        <div className="col-md-10 mb-2 row">
+          <div className="col-8">
+            <strong>Moving Average: {filterDays} Days</strong>
+            <Button 
+            onClick={() => setUseFilter(!useFilter)}
+            className="ml-2" variant={useFilter ? 'outline-dark' : 'info'} size="sm">
+              {useFilter ? 'Remove Filter' : 'Apply Filter'}
+            </Button>
+          </div>
+        </div>
       </div>
       <CompareModelsLine
         height={400}
@@ -131,6 +148,8 @@ export default function IndexPage() {
         showRate={rate}
         showCI={showCI}
         zoom={showZoom}
+        filter={useFilter}
+        filterDays={filterDays}
       />
       <br />
       <table className="table table-sm">

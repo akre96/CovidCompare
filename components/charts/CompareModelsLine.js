@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import models from '../../assets/models';
 import createDateTicks from '../../lib/createDateTicks';
+import rollingAverage from '../../lib/rollingAverage';
 
 // Get updated models only
 const currentModels = models
@@ -35,7 +36,7 @@ const currentModels = models
  * @param {object} data - data from /api/[region].js api call
  * @param {bool} showRate - toggles showing deaths/day or cumulative deaths
  */
-function CompareModelsLine({ height, sqlData, showRate, showCI, zoom }) {
+function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, filterDays }) {
   // React Hook for which models to display
   const [activeModels, setModels] = useState(currentModels);
 
@@ -45,6 +46,11 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom }) {
 
   // just names of models
   const modelNames = currentModels.map((m) => m.name);
+  const rangeNames = [];
+  modelNames.forEach((m) => {
+    rangeNames.push(`${m}_l`);
+    rangeNames.push(`${m}_u`);
+  });
 
   // Delete model predictions before today, fill null days
 
@@ -62,7 +68,19 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom }) {
   const data = sqlData.data.filter((d) => {
     return todayObj.isBefore(d.date);
   });
-  const allData = [...sqlData.truth, ...data];
+  let allData;
+  if (filter) {
+    const filtModelData = rollingAverage(data, filterDays, [...modelNames, ...rangeNames]);
+    filtModelData.forEach((d) => {
+      modelNames.forEach((m) => {
+        d[`${m}_range`] = [d[`${m}_l`], d[`${m}_u`]];
+      });
+    });
+
+    allData = [...rollingAverage(sqlData.truth, filterDays, ['truth']), ...filtModelData];
+  } else {
+    allData = [...sqlData.truth, ...data];
+  }
 
   // Checkboxes to plot/hide model predictions
   const ModelCheckboxes = activeModels.map((m, i) => (
@@ -144,7 +162,7 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom }) {
     if (v > 100000) {
       return `${(v / 1000).toFixed(0)}k`;
     }
-    if (v > 10000) {
+    if (v > 1000) {
       return `${(v / 1000).toFixed(1)}k`;
     }
     return `${(v / 1000).toFixed(2)}k`;

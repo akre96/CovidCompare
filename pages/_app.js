@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from '../components/layout';
 import PropTypes from 'prop-types';
+import Layout from '../components/layout';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.css';
