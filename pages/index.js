@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import Button from 'react-bootstrap/Button';
+import { BsBoxArrowRight } from 'react-icons/bs';
 import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 import Select from 'react-select';
 import Slider from 'rc-slider';
@@ -39,7 +40,12 @@ function ModelInfo() {
     })
     .map((m) => (
       <tr key={m.name}>
-        <td style={{ color: m.color }}>{m.name}</td>
+        <td style={{ color: m.color }}>
+          {m.name}
+        <a href={m.link} rel="noreferrer" target="_blank">
+          <BsBoxArrowRight style={{ marginLeft: '5px' }} />
+        </a>
+          </td>
         <td>{m.model_date}</td>
       </tr>
     ));
@@ -155,7 +161,7 @@ export default function IndexPage() {
       <table className="table table-sm">
         <thead>
           <tr>
-            <th>Model Name</th>
+            <th>Model Group</th>
             <th>Predictions Last Updated</th>
           </tr>
         </thead>

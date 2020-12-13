@@ -3,7 +3,6 @@
  * @author Samir Akre <sakre@g.ucla.edu>
  */
 import React, { useState } from 'react';
-import { BsBoxArrowRight } from 'react-icons/bs';
 import {
   ResponsiveContainer,
   Area,
@@ -102,9 +101,6 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
       />
       <label className="form-check-label" htmlFor={m.name}>
         <strong style={{ color: m.color }}>{m.name.replace(/_/g, '-')}</strong>
-        <a href={m.link} rel="noreferrer" target="_blank">
-          <BsBoxArrowRight style={{ marginLeft: '5px' }} />
-        </a>
       </label>
     </div>
   ));
