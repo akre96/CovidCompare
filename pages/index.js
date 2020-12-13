@@ -107,7 +107,7 @@ export default function IndexPage() {
       <br />
       <h3>{selectedCountry}</h3>
       <div className="row">
-        <div className="col-6">
+        <div className="col-sm-7">
           <ToggleButtonGroup
             type="radio"
             name="y-axis"
@@ -118,7 +118,7 @@ export default function IndexPage() {
             {AxesToggle}
           </ToggleButtonGroup>
         </div>
-        <div className="col-6">
+        <div className="col-sm-5">
           <Button
             onClick={() => setUseFilter(!useFilter)}
             size="sm"
