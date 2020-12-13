@@ -65,19 +65,19 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
     });
   });
 
-  const data = sqlData.data.filter((d) => {
+  let data = sqlData.data.filter((d) => {
     return todayObj.isBefore(d.date);
   });
   let allData;
   if (filter) {
-    const filtModelData = rollingAverage(data, filterDays, [...modelNames, ...rangeNames]);
-    filtModelData.forEach((d) => {
+    data = rollingAverage(data, filterDays, [...modelNames, ...rangeNames]);
+    data.forEach((d) => {
       modelNames.forEach((m) => {
         d[`${m}_range`] = [d[`${m}_l`], d[`${m}_u`]];
       });
     });
 
-    allData = [...rollingAverage(sqlData.truth, filterDays, ['truth']), ...filtModelData];
+    allData = [...rollingAverage(sqlData.truth, filterDays, ['truth']), ...data];
   } else {
     allData = [...sqlData.truth, ...data];
   }
