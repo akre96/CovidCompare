@@ -53,7 +53,7 @@ export default function IndexPage() {
   const [showZoom, setZoom] = useState(true);
   const [showCI, setCI] = useState(false);
   const [filterDays, setFilterDays] = useState(7);
-  const [useFilter, setUseFilter] = useState(false);
+  const [useFilter, setUseFilter] = useState(true);
 
   // find location id and call api for data
   const output = rate ? 'daily' : 'cumulative';
