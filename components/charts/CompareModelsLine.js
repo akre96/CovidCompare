@@ -132,6 +132,7 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
   // Hides tooltip for lower/upper bounds
   function tooltipFormatter(v, n, p) {
     try {
+      // just checks that number and not range
       v.toFixed(2);
       if (v < 100) {
         if (n === 'Recorded Deaths') return `${(v / 1000).toFixed(2)}k`;
@@ -140,7 +141,7 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
             1,
           )} - ${p.payload[`${p.name}_range`][1].toFixed(1)})`;
         }
-        return `${v.toFixed(1)}k`;
+        return `${v.toFixed(1)}`;
       }
       if (n === 'Recorded Deaths') return `${(v / 1000).toFixed(2)}k`;
       if (p.payload[`${p.name}_range`][0] !== null) {
@@ -148,7 +149,6 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
           p.payload[`${p.name}_range`][0] / 1000
         ).toFixed(2)}k - ${(p.payload[`${p.name}_range`][1] / 1000).toFixed(2)}k)`;
       }
-      // just checks that number and not range
       return `${(v / 1000).toFixed(2)}k`;
     } catch {
       return [null, null];
@@ -170,7 +170,7 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
     if (v > 1000) {
       return `${(v / 1000).toFixed(1)}k`;
     }
-    if (v < 100) {
+    if (v < 1000) {
       return v;
     }
 

@@ -89,10 +89,10 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
             Model Date: {dayjs(payload[0].payload.modelDate).format('MMM DD YYYY')}
           </p>
         )}
-        <p>{`Error: ${(payload[0].payload.error / 1000).toFixed(1)}k deaths`}</p>
-        <p>{`(Prediction: ${(payload[0].payload.cases / 1000).toFixed(1)}k, Recorded: ${(
+        <p>{`Error: ${(payload[0].payload.error / 1000).toFixed(2)}k deaths`}</p>
+        <p>{`(Prediction: ${(payload[0].payload.cases / 1000).toFixed(2)}k, Recorded: ${(
           payload[0].payload.truth / 1000
-        ).toFixed(1)}k)`}</p>
+        ).toFixed(2)}k)`}</p>
       </div>
     );
   }
