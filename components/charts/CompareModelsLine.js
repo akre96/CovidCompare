@@ -133,6 +133,15 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
   function tooltipFormatter(v, n, p) {
     try {
       v.toFixed(2);
+      if (v < 100) {
+        if (n === 'Recorded Deaths') return `${(v / 1000).toFixed(2)}k`;
+        if (p.payload[`${p.name}_range`][0] !== null) {
+          return `${v.toFixed(1)} (95% CI ${p.payload[`${p.name}_range`][0].toFixed(
+            1,
+          )} - ${p.payload[`${p.name}_range`][1].toFixed(1)})`;
+        }
+        return `${v.toFixed(1)}k`;
+      }
       if (n === 'Recorded Deaths') return `${(v / 1000).toFixed(2)}k`;
       if (p.payload[`${p.name}_range`][0] !== null) {
         return `${(v / 1000).toFixed(2)}k (95% CI ${(
@@ -161,6 +170,10 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
     if (v > 1000) {
       return `${(v / 1000).toFixed(1)}k`;
     }
+    if (v < 100) {
+      return v;
+    }
+
     return `${(v / 1000).toFixed(2)}k`;
   }
   let range = [allData[0].date, allData[allData.length - 1].date];
