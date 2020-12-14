@@ -21,6 +21,10 @@
         "bio": "Patty Liu (he/him) is a 4th Year Medical Student at the David Geffen School of Medicine. He is passionate about using data to promote health equity, with a previous focus in child and maternal health access and social determinants of health. He completed his MPH in Global Health Metrics at the  Institute of Health Metrics and evaluation at the University of Washington, and his undergraduate training (BA) in Neuroscience and Economics at Pomona College.",
         "links": [
             {
+                "name": "Google Scholar", 
+                "url": "https://scholar.google.com/citations?user=WKCIJ-UAAAAJ"
+            },
+            {
                 "name": "@pyliu47",
                 "url": "https://twitter.com/pyliu47"
             }
