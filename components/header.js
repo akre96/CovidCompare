@@ -1,13 +1,12 @@
 /* eslint-disable react/jsx-filename-extension */
 import Link from 'next/link';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'next/image';
 import Nav from 'react-bootstrap/Nav';
 
-const Header = ({ siteTitle }) => (
+const Header = () => (
   <Navbar variant="light" bg="light" expand="lg">
     <div className="container-lg">
       <Navbar.Brand className="brand-text" style={{ fontSize: '1.25em' }}>
@@ -39,13 +38,5 @@ const Header = ({ siteTitle }) => (
     </div>
   </Navbar>
 );
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-};
-
-Header.defaultProps = {
-  siteTitle: ``,
-};
 
 export default Header;

@@ -13,6 +13,11 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import PropTypes from 'prop-types';
 import fetcher from '../lib/fetcher';
 import ErrHeatmap from '../components/charts/errHeatmap';
+import Layout from '../components/layout';
+
+const pageName = 'Model Performance';
+const pageDescription =
+  'Compare the predictive performance of forecasting models over time';
 
 dayjs.extend(customParseFormat);
 
@@ -90,7 +95,7 @@ const ModelErrorPage = () => {
   const regionSelectList = superRegions.map((loc) => ({ value: loc, label: loc }));
 
   return (
-    <>
+    <Layout pageName={pageName} pageDescription={pageDescription}>
       <h2>How have the models performed?</h2>
       <p>Compare the predictive performance of forecasting models over time</p>
       <p>
@@ -249,7 +254,7 @@ const ModelErrorPage = () => {
           <strong>Loading...</strong>
         )}
       </div>
-    </>
+    </Layout>
   );
 };
 

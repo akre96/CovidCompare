@@ -6,8 +6,14 @@ import React from 'react';
 import Image from 'react-bootstrap/Image';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import PropTypes from 'prop-types';
+import Layout from '../components/layout';
+
 
 import TeamMembers from '../assets/team_members.json';
+
+const pageName = 'About the Team';
+const pageDescription =
+  'Our team comprises of 3 UCLA Medical/PhD Students';
 
 function TeamMember({ info }) {
   const linkData = info.links.map((l) => (
@@ -45,9 +51,9 @@ TeamMember.propTypes = {
 export default function TeamPage() {
   const members = TeamMembers.map((m) => <TeamMember key={m.name} info={m} />);
   return (
-    <>
+    <Layout pageName={pageName} pageDescription={pageDescription}>
       <h2>The Team</h2>
       <div className="row justify-content-center">{members}</div>
-    </>
+    </Layout>
   );
 }

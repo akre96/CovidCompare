@@ -9,10 +9,10 @@ import Button from 'react-bootstrap/Button';
 import { BsBoxArrowRight } from 'react-icons/bs';
 import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 import Select from 'react-select';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
+import Layout from '../components/layout';
+
 import fetcher from '../lib/fetcher';
 import models from '../assets/models';
 
@@ -96,7 +96,7 @@ export default function IndexPage() {
   ));
 
   return (
-    <>
+    <Layout>
       <h2 className="h2 pb-1">Current COVID-19 Forecasts</h2>
       <p>Compare predicted trajectories in COVID-19 mortality from major, global models</p>
       <Select
@@ -168,6 +168,6 @@ export default function IndexPage() {
           <ModelInfo />
         </tbody>
       </table>
-    </>
+    </Layout>
   );
 }

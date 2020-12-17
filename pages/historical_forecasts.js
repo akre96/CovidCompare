@@ -8,6 +8,8 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
+import Layout from '../components/layout';
+
 
 import ModelErrorLine from '../components/charts/modelErrorLine';
 import fetcher from '../lib/fetcher';
@@ -15,6 +17,10 @@ import createDateTicks from '../lib/createDateTicks';
 
 import locIdMap from '../assets/loc_id_map.json';
 import models from '../assets/models';
+
+const pageName = 'Historical Forecasts';
+const pageDescription =
+  'View all historical forecasts from each modelling group, as well as errors';
 
 const ModelPredictionErrorPage = () => {
   const defaultRange = [dayjs('2020-03-25').valueOf(), dayjs().valueOf()];
@@ -64,7 +70,7 @@ const ModelPredictionErrorPage = () => {
   const activeMonths = months.filter((m) => m.active);
 
   return (
-    <>
+    <Layout pageName={pageName} pageDescription={pageDescription}>
       <h2>Historical Forecasts</h2>
       <p>
         This view shows all historical forecasts from each modelling group, as well as errors
@@ -116,7 +122,8 @@ const ModelPredictionErrorPage = () => {
           </Button>
         </div>
       </div>
-    </>
+    </Layout>
+
   );
 };
 

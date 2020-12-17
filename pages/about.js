@@ -4,7 +4,11 @@
  */
 import React from 'react';
 import micromark from 'micromark';
+import Layout from '../components/layout';
 
+const pageName = 'About the covidcompare.io project';
+const pageDescription =
+  'The covidcompare tool provides up-to-date comparisons how well international COVID-19 mortality forecasting models are performing and have performed over time.';
 const md = `
 ## About covidcompare
 
@@ -45,7 +49,11 @@ Predictive performance of international COVID-19 mortality forecasting models Jo
 
 const AboutPage = () => {
   const htmlString = micromark(md);
-  return <div dangerouslySetInnerHTML={{ __html: htmlString }} />;
+  return (
+    <Layout pageName={pageName} pageDescription={pageDescription}>
+      <div dangerouslySetInnerHTML={{ __html: htmlString }} />
+    </Layout>
+  );
 };
 
 export default AboutPage;

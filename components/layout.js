@@ -6,16 +6,20 @@ import Head from 'next/head';
 
 import Header from './header';
 
-const Layout = ({ children }) => (
+const Layout = ({ children, pageName, pageDescription }) => (
   <>
     <Head>
-      <title>covidcompare.io</title>
+      <title>{pageName || 'covidcompare.io'}</title>
       <meta
         property="description"
-        content="Compare predicted trajectories in COVID-19 mortality from major, global models"
+        content={
+          pageDescription ||
+          'Compare predicted trajectories in COVID-19 mortality from major, global models'
+        }
       />
       <meta name="robots" content="index, follow" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="google-site-verification" content="SKZ5pm_1GXtoaohhKeTG-o_47_XTMSmW3gbqfA-w7kY" />
       <meta charSet="UTF-8" />
       <meta property="og:url" content="https://covidcompare.io" />
       <meta property="og:type" content="website" />
