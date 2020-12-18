@@ -3,6 +3,7 @@
  * @author Samir Akre <sakre@g.ucla.edu>
  */
 import React, { useState } from 'react';
+import Link from 'next/link';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import Button from 'react-bootstrap/Button';
@@ -156,6 +157,17 @@ export default function IndexPage() {
         filterDays={filterDays}
       />
       <p style={{ color: 'gray' }}>* 7 day moving average filter used for smoothing</p>
+      <h4>Take a Deeper Look</h4>
+      <ul>
+        <li>
+          <Link href="/model_performance">Model Performance Page:</Link> Compare the predictive
+          performance of forecasting models over time
+        </li>
+        <li>
+          <Link href="/historical_forecasts">Historical Forecasts Page: </Link> View how individual
+          models have forecasted in the past
+        </li>
+      </ul>
       <br />
       <table className="table table-sm">
         <thead>
