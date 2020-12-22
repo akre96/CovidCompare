@@ -29,7 +29,7 @@ const models = [
   },
   {
     name: 'Imperial',
-    color: '#8c7ae6',
+    color: '#984ea3',
     link: 'https://mrc-ide.github.io/global-lmic-reports/',
     current: true,
   },
