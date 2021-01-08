@@ -29,10 +29,12 @@ function ModelInfo() {
     .map((m) => {
       if (data) {
         const modelDate = data.data.filter((m2) => m2.model_short === m.name);
-        return {
-          ...m,
-          model_date: dayjs(modelDate[0].model_date).format('MMM DD YYYY'),
-        };
+        if (modelDate.length > 0) {
+          return {
+            ...m,
+            model_date: dayjs(modelDate[0].model_date).format('MMM DD YYYY'),
+          };
+        }
       }
       return {
         ...m,

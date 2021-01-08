@@ -54,7 +54,6 @@ const Layout = ({ children, pageName, pageDescription }) => (
               Give Feedback
             </button>
           </a>
-
         </p>
         <p style={{ textAlign: 'center', width: '100%' }}>
           © {new Date().getFullYear()} Joseph Friedman, Patrick Liu, Samir Akre
@@ -87,6 +86,12 @@ const Layout = ({ children, pageName, pageDescription }) => (
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
+  pageName: PropTypes.string,
+  pageDescription: PropTypes.string,
+};
+Layout.defaultProps = {
+  pageName: 'covidcompare.io',
+  pageDescription: 'Compare predicted trajectories in COVID-19 mortality from major, global models',
 };
 
 export default Layout;

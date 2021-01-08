@@ -11,7 +11,7 @@ const Header = () => (
     <div className="container-lg">
       <Navbar.Brand className="brand-text" style={{ fontSize: '1.25em' }}>
         <Link href="/">
-          <Image height={50} width={50} src="/logo.png" />
+          <Image alt="covidcompare.io logo" height={50} width={50} src="/logo.png" />
         </Link>
         <span>covidcompare.io</span>
       </Navbar.Brand>

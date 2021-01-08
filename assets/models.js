@@ -4,25 +4,31 @@
 
 const models = [
   {
+    name: 'UCLA_ML',
+    color: '#1e3799',
+    link: 'https://covid19.uclaml.org/',
+    current: true,
+  },
+  {
     name: 'Delphi',
     color: '#e84118',
     link: 'https://www.covidanalytics.io',
     current: true,
   },
   {
-    name: 'IHME-MS-SEIR',
+    name: 'IHME_MS_SEIR',
     color: '#44bd32',
     link: 'https://covid19.healthdata.org/global',
     current: true,
   },
   {
-    name: 'IHME-CF-SEIR',
+    name: 'IHME_CF_SEIR',
     color: '#006266',
     link: 'https://covid19.healthdata.org/global',
     current: false,
   },
   {
-    name: 'IHME-CF',
+    name: 'IHME_CF',
     color: '#2ecc71',
     link: 'https://covid19.healthdata.org/global',
     current: false,

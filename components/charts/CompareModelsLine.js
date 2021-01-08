@@ -109,7 +109,16 @@ function CompareModelsLine({ height, sqlData, showRate, showCI, zoom, filter, fi
   const modelLines = activeModels
     .filter((m) => m.active)
     .map((m) => {
-      return <Line key={m.name} type="monotone" dataKey={m.name} stroke={m.color} dot={false} />;
+      return (
+        <Line
+          key={m.name}
+          type="monotone"
+          dataKey={m.name}
+          stroke={m.color}
+          dot={false}
+          strokeWidth={2}
+        />
+      );
     });
   // lower/upper bounds of models
   const modelErrors = activeModels
