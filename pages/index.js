@@ -7,53 +7,18 @@ import Link from 'next/link';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import Button from 'react-bootstrap/Button';
-import { BsBoxArrowRight } from 'react-icons/bs';
 import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai';
 import Select from 'react-select';
 import useSWR from 'swr';
-import dayjs from 'dayjs';
 import Layout from '../components/layout';
 
 import fetcher from '../lib/fetcher';
-import models from '../assets/models';
 
 import CompareModelsLine from '../components/charts/CompareModelsLine';
+import ModelDateTable from '../components/ModelDateTable';
 
 import locIdMap from '../assets/loc_id_map.json';
 
-// Table rows for model showing model date
-function ModelInfo() {
-  const { data } = useSWR('/api/forecast/model_dates', fetcher);
-  const modelInfo = models
-    .filter((m) => m.current)
-    .map((m) => {
-      if (data) {
-        const modelDate = data.data.filter((m2) => m2.model_short === m.name);
-        if (modelDate.length > 0) {
-          return {
-            ...m,
-            model_date: dayjs(modelDate[0].model_date).format('MMM DD YYYY'),
-          };
-        }
-      }
-      return {
-        ...m,
-        model_date: '...loading',
-      };
-    })
-    .map((m) => (
-      <tr key={m.name}>
-        <td style={{ color: m.color }}>
-          {m.name}
-          <a href={m.link} rel="noreferrer" target="_blank">
-            <BsBoxArrowRight style={{ marginLeft: '5px' }} />
-          </a>
-        </td>
-        <td>{m.model_date}</td>
-      </tr>
-    ));
-  return modelInfo;
-}
 // Component that is returned for home page
 export default function IndexPage() {
   // React Hooks for current country and y-axis
@@ -171,17 +136,7 @@ export default function IndexPage() {
         </li>
       </ul>
       <br />
-      <table className="table table-sm">
-        <thead>
-          <tr>
-            <th>Model Group</th>
-            <th>Predictions Last Updated</th>
-          </tr>
-        </thead>
-        <tbody>
-          <ModelInfo />
-        </tbody>
-      </table>
+      <ModelDateTable />
     </Layout>
   );
 }
