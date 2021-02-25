@@ -76,7 +76,7 @@ MonthSelect.defaultProps = {
 
 const ModelErrorPage = () => {
   // React hook paramaters for data selection
-  const [modelMonth, setMonth] = useState('Oct, 2020');
+  const [modelMonth, setMonth] = useState('Jan, 2021');
   const [errType, setErrType] = useState(errTypes[0]);
   const [variableType, setVariableType] = useState(variableTypes[0]);
   const [superRegion, setSuperRegion] = useState(superRegions[0]);
