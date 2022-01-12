@@ -23,8 +23,8 @@ module.exports = {
   ignorePatterns: ['/node_modules/**', '/build/**'],
   rules: {
     'no-unused-vars': ['warn', { args: 'none', argsIgnorePattern: 'req|res|next|val' }],
-    'prettier/prettier': ['error'],
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'prettier/prettier': ['warn'],
+    'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx'] }],
   },
   settings: {
     react: {
