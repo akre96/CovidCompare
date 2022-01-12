@@ -9,13 +9,15 @@ import models from '../../assets/models';
 const modelOrder = {};
 models.map((m, i) => {
   modelOrder[m.name] = i;
+  return true;
 });
 
 function transformDataHeatmap(data, region) {
   const out = Array(models.length).fill(null);
-  for (let i = 0; i < models.length; i++) {
+  for (let i = 0; i < models.length; i += 1) {
     out[i] = Array(12).fill(null);
   }
+  // eslint-disable-next-line array-callback-return
   data.map((d) => {
     if (d.super_region === region) {
       if (typeof modelOrder[d.model_short] === 'undefined') return;
@@ -26,7 +28,7 @@ function transformDataHeatmap(data, region) {
 }
 function ErrHeatmap({ data, region }) {
   const xLabels = [];
-  for (let i = 1; i <= 12; i++) {
+  for (let i = 1; i <= 12; i += 1) {
     xLabels.push(i);
   }
 

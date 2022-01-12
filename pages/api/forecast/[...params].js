@@ -16,7 +16,7 @@ async function getForecast(req, res) {
     forecastTable = 'currentforecast';
     truthTable = 'truth';
   } else {
-    throw 'Error: Output variable not supported';
+    throw new Error('Output variable not supported');
   }
   const truth = await runQuery(
     SQL`

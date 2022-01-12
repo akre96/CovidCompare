@@ -1,3 +1,5 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/prop-types */
 /**
  * @file Component used to show linechart of prediction errors over time
  * @author Samir Akre <sakre@g.ucla.edu>
@@ -51,7 +53,7 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
         date: dayjs(d.date).valueOf(),
         modelDate: d.model_date,
         cases: d.mean,
-        error: error,
+        error,
         truth: d.truth,
       };
     });
@@ -63,8 +65,9 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
     cases: 'Predicted Deaths',
     error: 'Error',
   };
+  // eslint-disable-next-line react/prop-types
   function PredictionTooltip({ payload }) {
-    if (!payload[0]) return;
+    if (!payload[0]) return null;
     return (
       <div className="scatterToolTip">
         <p className="date">{dayjs(payload[0].payload.date).format('MMM DD YYYY')}</p>
@@ -80,7 +83,7 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
     );
   }
   function ErrorToolTip({ payload }) {
-    if (!payload[0]) return;
+    if (!payload[0]) return null;
     return (
       <div className="scatterToolTip">
         <p className="date">{dayjs(payload[0].payload.date).format('MMM DD YYYY')}</p>

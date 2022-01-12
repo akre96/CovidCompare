@@ -25,6 +25,7 @@ module.exports = {
     'no-unused-vars': ['warn', { args: 'none', argsIgnorePattern: 'req|res|next|val' }],
     'prettier/prettier': ['warn'],
     'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx'] }],
+    'react/jsx-no-bind': ['warn'],
   },
   settings: {
     react: {

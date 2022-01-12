@@ -1,3 +1,5 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-param-reassign */
 /**
  * @file Component used to show linechart of COVID deaths and deaths per day
  * @author Samir Akre <sakre@g.ucla.edu>
@@ -252,6 +254,8 @@ CompareModelsLine.propTypes = {
   showRate: PropTypes.bool.isRequired,
   showCI: PropTypes.bool.isRequired,
   zoom: PropTypes.bool.isRequired,
+  filter: PropTypes.bool.isRequired,
+  filterDays: PropTypes.number.isRequired,
 };
 CompareModelsLine.defaultProps = {
   height: 500,
