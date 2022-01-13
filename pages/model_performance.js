@@ -49,7 +49,7 @@ function MonthSelect({ data, onChange, value }) {
       dayjs(b.model_month.replace(',', ''), 'MMM YYYY'),
   );
   const selectList = data.data
-    .filter((m) => m.model_month !== 'N/A')
+    .filter((m) => m.model_month !== 'N/A' && m.model_month !== 'NULL')
     .map((m) => ({ value: m.model_month, label: m.model_month }));
   return <Select options={selectList} defaultValue={value} onChange={onChange} />;
 }
