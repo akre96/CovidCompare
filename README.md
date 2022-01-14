@@ -24,3 +24,11 @@ module.exports = {
 - Ask author for help to connect to our database
 
 3. Run command `npm run dev`
+
+## Working with Docker image
+
+### Building the app
+`COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build`
+
+### Run Locally
+`docker-compose up`
