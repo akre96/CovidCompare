@@ -3,20 +3,15 @@
  */
 import { SQL } from 'sql-template-strings';
 import runQuery from '../../../lib/db';
+import dayjs from 'dayjs';
 
 export default async function (req, res) {
   const {
     query: { params },
   } = req;
-  const [loc, model] = params.splice(0, 2);
-  const truth = await runQuery(SQL`
-    SELECT
-        date,
-        truth 
-    FROM truth
-    WHERE ihme_loc_id = ${loc}
-    ORDER BY date
-`);
+  console.log(params)
+  const [loc, model, time] = params.splice(0, 3);
+
   const dataQuery = SQL`
         SELECT
             forecast.date,
@@ -29,8 +24,10 @@ export default async function (req, res) {
           AND forecast.ihme_loc_id = truth.ihme_loc_id)
         WHERE forecast.ihme_loc_id = ${loc}
         AND forecast.model_short = ${model}
+        AND YEAR(forecast.model_date) = ${time.split('-')[1]}
+        AND MONTH(forecast.model_date) = ${time.split('-')[0]}
         ORDER BY date
     `;
   const data = await runQuery(dataQuery);
-  res.status(200).json({ data, truth });
+  res.status(200).json({ data });
 }

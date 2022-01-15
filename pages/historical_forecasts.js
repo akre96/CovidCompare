@@ -2,14 +2,13 @@
  * @file Show all forecasts and associated errors for a model as a scatter plot
  * @author Samir Akre <sakre@g.ucla.edu>
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 import Layout from '../components/layout';
-
 
 import ModelErrorLine from '../components/charts/modelErrorLine';
 import fetcher from '../lib/fetcher';
@@ -26,16 +25,61 @@ const ModelPredictionErrorPage = () => {
   const defaultRange = [dayjs('2020-03-25').valueOf(), dayjs().valueOf()];
   const defaultMonths = createDateTicks(defaultRange).map((d) => ({ value: d, active: true }));
 
-  // React Hooks for current region/country
+  // React Hooks
   const [selectedCountry, setRegion] = useState('United States');
   const [modelName, setModel] = useState(models[0].name);
   const [months, setModelMonths] = useState(defaultMonths);
+  const [isLoadingData, setLoadingData] = useState(false);
+  const [isLoadingTruth, setLoadingTruth] = useState(false);
+  const [data, setData] = useState([]);
+  const [truth, setTruth] = useState([]);
+
+
+  useEffect(() => {
+    async function getTruth() {
+      const tmpTruth = await fetcher(`/api/truth/${locIdMap[selectedCountry]}`);
+      setTruth(tmpTruth.truth);
+      setLoadingTruth(false);
+    }
+    setLoadingTruth(true);
+    getTruth();
+    return null;
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    let forecastData = [];
+    async function getData(url) {
+      setLoadingData(true)
+      const tmpData = await fetcher(url);
+      forecastData = [...tmpData.data, ...forecastData];
+      setData(forecastData);
+      setLoadingData(false)
+    }
+    // eslint-disable-next-line array-callback-return
+    defaultMonths.map((m) => {
+      console.log('[useEffect 2] in map');
+      const url = `/api/historical_forecasts/${locIdMap[selectedCountry]}/${modelName}/${dayjs(
+        m.value,
+      ).format('MM-YYYY')}`;
+      getData(url);
+    });
+    return null;
+  }, [selectedCountry, modelName]);
+
+  const activeMonths = months.filter((m) => m.active);
+  const hideGraph = data === [] || truth === [];
+  console.log('HideGraph:');
+  console.log(hideGraph);
 
   // create query for dates
+  /*
   const { data, error } = useSWR(
-    `/api/historical_forecasts/${locIdMap[selectedCountry]}/${modelName}`,
+    `/api/historical_forecasts/${locIdMap[selectedCountry]}/${modelName}/${activeMonths
+      .map((m) => dayjs(m.value).format('MM-YYYY'))
+      .join('/')}`,
     fetcher,
   );
+  */
 
   // List of possible regions
   const regionSelectList = Object.keys(locIdMap).map((loc) => ({
@@ -48,9 +92,11 @@ const ModelPredictionErrorPage = () => {
     label: m.name,
   }));
 
+  /*
   if (error) {
     return 'SQL Error Encountered. Try refresing your browser.';
   }
+  */
   const ModelMonthButtons = months.map((m, i) => (
     <Button
       key={m.value}
@@ -66,8 +112,6 @@ const ModelPredictionErrorPage = () => {
       {dayjs(m.value).format('MMM YYYY')}
     </Button>
   ));
-
-  const activeMonths = months.filter((m) => m.active);
 
   return (
     <Layout pageName={pageName} pageDescription={pageDescription}>
@@ -86,7 +130,10 @@ const ModelPredictionErrorPage = () => {
           <Select
             options={regionSelectList}
             defaultValue={{ value: 'United States', label: 'United States' }}
-            onChange={(e) => setRegion(e.value)}
+            onChange={(e) => {
+              setData([]);
+              setRegion(e.value);
+            }}
           />
         </div>
         <div className="col-sm-6">
@@ -94,11 +141,18 @@ const ModelPredictionErrorPage = () => {
           <Select
             options={modelList}
             defaultValue={modelList[0]}
-            onChange={(e) => setModel(e.value)}
+            onChange={(e) => {
+              setData([]);
+              setModel(e.value);
+            }}
           />
         </div>
       </div>
-      <ModelErrorLine sqlData={data} activeMonths={activeMonths} name={modelName} />
+      {hideGraph ? (
+        <ModelErrorLine activeMonths={activeMonths} name={modelName} />
+      ) : (
+        <ModelErrorLine sqlData={{ data, truth }} activeMonths={activeMonths} name={modelName} />
+      )}
       <div className="row justify-content-center">
         <div className="col-lg-10" style={{ overflowX: 'scroll' }}>
           <strong>Showing Models Created In:</strong>
@@ -123,7 +177,6 @@ const ModelPredictionErrorPage = () => {
         </div>
       </div>
     </Layout>
-
   );
 };
 

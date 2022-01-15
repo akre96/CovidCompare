@@ -102,7 +102,7 @@ function ModelErrorLine({ sqlData, name, activeMonths }) {
   if (modelData.length < 1) {
     modelData.push(defaultData.data[0]);
   }
-  const range = [truthData[0].date, dayjs().add(3, 'month').valueOf()];
+  const range = [dayjs('Jan 1 2020').valueOf(), dayjs().add(3, 'month').valueOf()];
   return (
     <>
       <strong>Prediction (Cumulative Deaths)</strong>
