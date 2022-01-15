@@ -1,6 +1,3 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker-compose'
-  env:
-  - 'COMPOSE_DOCKER_CLI_BUILD=1'
-  - 'DOCKER_BUILDKIT=1'
+- name: 'docker/compose:1.19.0'
   args: ['build']
