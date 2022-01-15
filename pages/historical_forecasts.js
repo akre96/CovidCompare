@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
-import useSWR from 'swr';
 import dayjs from 'dayjs';
 import Layout from '../components/layout';
 
@@ -57,7 +56,6 @@ const ModelPredictionErrorPage = () => {
     }
     // eslint-disable-next-line array-callback-return
     defaultMonths.map((m) => {
-      console.log('[useEffect 2] in map');
       const url = `/api/historical_forecasts/${locIdMap[selectedCountry]}/${modelName}/${dayjs(
         m.value,
       ).format('MM-YYYY')}`;
@@ -68,18 +66,6 @@ const ModelPredictionErrorPage = () => {
 
   const activeMonths = months.filter((m) => m.active);
   const hideGraph = data === [] || truth === [];
-  console.log('HideGraph:');
-  console.log(hideGraph);
-
-  // create query for dates
-  /*
-  const { data, error } = useSWR(
-    `/api/historical_forecasts/${locIdMap[selectedCountry]}/${modelName}/${activeMonths
-      .map((m) => dayjs(m.value).format('MM-YYYY'))
-      .join('/')}`,
-    fetcher,
-  );
-  */
 
   // List of possible regions
   const regionSelectList = Object.keys(locIdMap).map((loc) => ({

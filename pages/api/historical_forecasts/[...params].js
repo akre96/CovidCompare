@@ -8,7 +8,6 @@ export default async function (req, res) {
   const {
     query: { params },
   } = req;
-  console.log(params)
   const [loc, model, time] = params.splice(0, 3);
 
   const dataQuery = SQL`
