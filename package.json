@@ -28,9 +28,7 @@
     "recharts": "^1.8.5",
     "serverless-mysql": "^1.5.4",
     "sql-template-strings": "^2.2.2",
-    "swr": "^0.3.8"
-  },
-  "devDependencies": {
+    "swr": "^0.3.8",
     "@testing-library/dom": "^7.29.0",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
