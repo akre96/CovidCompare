@@ -3,7 +3,6 @@
  */
 import { SQL } from 'sql-template-strings';
 import runQuery from '../../../lib/db';
-import dayjs from 'dayjs';
 
 export default async function (req, res) {
   const {
